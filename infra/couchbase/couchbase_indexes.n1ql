@@ -1,0 +1,66 @@
+-- Bagian DDL index saja (salinan dari couchbase_ddl.n1ql §3–§5).
+-- Pakai ini kalau scope+collection sudah ada tapi perlu mengulang index
+-- tanpa mengulang CREATE SCOPE / CREATE COLLECTION.
+-- Semua secondary index tetap defer_build; jalankan build_indexes.n1ql
+-- SETELAH data dimuat.
+
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_produk     ON `bri_tabungan`.`operasional`.`produk`;
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_unit_kerja ON `bri_tabungan`.`operasional`.`unit_kerja`;
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_kanal      ON `bri_tabungan`.`operasional`.`kanal`;
+
+CREATE INDEX IF NOT EXISTS idx_nasabah_nik ON `bri_tabungan`.`operasional`.`nasabah`(nik) WITH {"defer_build": true};
+CREATE INDEX IF NOT EXISTS idx_produk_nama ON `bri_tabungan`.`operasional`.`produk`(nama_produk) WITH {"defer_build": true};
+CREATE INDEX IF NOT EXISTS idx_kanal_nama  ON `bri_tabungan`.`operasional`.`kanal`(nama_kanal) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_rek_holder ON `bri_tabungan`.`operasional`.`rekening`(
+    DISTINCT ARRAY h.id_nasabah FOR h IN pemegang_rekening END
+  )
+  WHERE status_rekening = 'AKTIF' WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_rek_idle ON `bri_tabungan`.`operasional`.`rekening`(
+    status_rekening, last_transaction_at, saldo_efektif
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_nasabah_tanpa_rekening ON `bri_tabungan`.`operasional`.`nasabah`(
+    id_nasabah
+  )
+  WHERE ARRAY_LENGTH(rekening_refs) = 0 OR rekening_refs IS MISSING WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_rek_unit ON `bri_tabungan`.`operasional`.`rekening`(
+    id_unit_kerja, status_rekening, saldo_efektif
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_posting_rek ON `bri_tabungan`.`operasional`.`posting_bunga`(
+    no_rekening, periode
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_instr_aktif ON `bri_tabungan`.`operasional`.`instruksi_terjadwal`(
+    status_instruksi, tanggal_selesai
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_kartu_expiry ON `bri_tabungan`.`operasional`.`kartu_debit`(
+    status_kartu, tanggal_kadaluarsa
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_rek_produk ON `bri_tabungan`.`operasional`.`rekening`(
+    id_produk, status_rekening
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_kartu_rekening ON `bri_tabungan`.`operasional`.`kartu_debit`(
+    no_rekening
+  ) WITH {"defer_build": true};
+
+CREATE INDEX IF NOT EXISTS idx_unit_induk ON `bri_tabungan`.`operasional`.`unit_kerja`(
+    id_unit_induk
+  ) WITH {"defer_build": true};
+
+-- Transactional Outbox: relay mencari event PENDING (urut waktu dibuat)
+CREATE INDEX IF NOT EXISTS idx_outbox_status ON `bri_tabungan`.`operasional`.`outbox`(status, created_at) WITH {"defer_build": true};
+
+-- Primary index (untuk validasi jumlah dokumen & debug; query aplikasi memakai KV / GSI di atas)
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_nasabah ON `bri_tabungan`.`operasional`.`nasabah` WITH {"defer_build": true};
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_rekening ON `bri_tabungan`.`operasional`.`rekening` WITH {"defer_build": true};
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_kartu_debit ON `bri_tabungan`.`operasional`.`kartu_debit` WITH {"defer_build": true};
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_posting_bunga ON `bri_tabungan`.`operasional`.`posting_bunga` WITH {"defer_build": true};
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_instruksi_terjadwal ON `bri_tabungan`.`operasional`.`instruksi_terjadwal` WITH {"defer_build": true};
+CREATE PRIMARY INDEX IF NOT EXISTS idx_primary_outbox ON `bri_tabungan`.`operasional`.`outbox` WITH {"defer_build": true};

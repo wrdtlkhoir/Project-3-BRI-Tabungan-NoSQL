@@ -1,0 +1,137 @@
+-- ============================================================================
+-- Query Write Couchbase (W-01..W-10) — Project Part-3 Tabungan BRI
+-- ============================================================================
+--  Sesuai PLAN.md §4: semua WRITE ditangani Couchbase. Cassandra hanya
+--  menerima append ledger pada W-07 (lihat PLAN.md §7).
+--
+--  Jalankan di Query Workbench (http://localhost:8091 -> Query) atau:
+--    docker exec bri-couchbase cbq -u Administrator -p password \
+--      -e http://localhost:8093 -f /write_queries.n1ql
+--
+--  Catatan ACID: W-01 dan W-03 menyentuh dua dokumen, jadi dibungkus
+--  BEGIN TRANSACTION / COMMIT (transaksi SQL++ Couchbase). W-07 juga
+--  multi-dokumen + lintas-store; versi skrip benchmark-nya memakai
+--  SDK transaction (lihat couchbase/run_write_bench.py).
+--
+--  Rekening uji: 002101000000001 (saldo 151263509.16 / 151213509.16,
+--  tx_count 41 pada dump yang diverifikasi) dan 002101000000004.
+-- ============================================================================
+
+-- Helper: ambil no_kartu milik rekening uji (salin hasilnya ke W-06).
+SELECT RAW kd.no_kartu
+FROM `bri_tabungan`.`operasional`.`kartu_debit` kd
+WHERE kd.no_rekening = '002101000000001'
+LIMIT 1;
+
+
+-- W-01 Mendaftarkan nasabah baru
+-- Guard UNIQUE(nik): N1QL tidak punya UNIQUE INDEX, jadi keunikan ditegakkan
+-- lewat document key "nik::<nik>". INSERT (bukan UPSERT) gagal kalau key ada.
+BEGIN TRANSACTION;
+  INSERT INTO `bri_tabungan`.`operasional`.`nasabah` (KEY, VALUE) VALUES
+    ("nik::3201010101900001", {"id_nasabah": "NSB900000001"});
+  INSERT INTO `bri_tabungan`.`operasional`.`nasabah` (KEY, VALUE) VALUES
+    ("nasabah::NSB900000001", {
+      "_type": "nasabah", "id_nasabah": "NSB900000001", "nik": "3201010101900001",
+      "nama_lengkap": "Budi Santoso", "jenis_nasabah": "INDIVIDU",
+      "segmen_nasabah": "RITEL", "status_kyc": "MENUNGGU_VERIFIKASI",
+      "tanggal_registrasi": "2026-11-21", "rekening_refs": []
+    });
+COMMIT;
+
+
+-- W-02 Membuka rekening tabungan baru
+INSERT INTO `bri_tabungan`.`operasional`.`rekening` (KEY, VALUE) VALUES
+  ("rekening::002109000000001", {
+    "_type": "rekening", "no_rekening": "002109000000001", "id_produk": "PRD01",
+    "mata_uang": "IDR", "tanggal_buka": "2026-11-21", "tanggal_tutup": null,
+    "status_rekening": "AKTIF", "saldo_efektif": 0, "saldo_tersedia": 0,
+    "id_unit_kerja": "UK0005", "pemegang_rekening": [],
+    "last_transaction_at": null, "tx_count": 0
+  });
+
+
+-- W-03 Mencatat pemegang rekening
+-- Dua dokumen (rekening + nasabah.rekening_refs) -> satu transaksi.
+BEGIN TRANSACTION;
+  UPDATE `bri_tabungan`.`operasional`.`rekening`
+  SET pemegang_rekening = ARRAY_APPEND(pemegang_rekening, {
+        "id_nasabah": "NSB000000002", "peran": "PESERTA",
+        "penanda_utama": "N", "tanggal_mulai": "2026-11-21"
+      })
+  WHERE no_rekening = '002101000000001';
+  UPDATE `bri_tabungan`.`operasional`.`nasabah`
+  SET rekening_refs = ARRAY_APPEND(rekening_refs, {
+        "no_rekening": "002101000000001", "peran": "PESERTA", "penanda_utama": "N"
+      })
+  WHERE id_nasabah = 'NSB000000002';
+COMMIT;
+
+
+-- W-04 Mendaftarkan kartu debit
+INSERT INTO `bri_tabungan`.`operasional`.`kartu_debit` (KEY, VALUE) VALUES
+  ("kartu_debit::5221849999999999", {
+    "_type": "kartu_debit", "no_kartu": "5221849999999999",
+    "no_rekening": "002101000000001", "bentuk_kartu": "FISIK",
+    "jaringan_kartu": "VISA", "status_kartu": "AKTIF",
+    "tanggal_terbit": "2026-11-21", "tanggal_kadaluarsa": "2031-11-01"
+  });
+
+
+-- W-05 Memblokir rekening (kondisi AKTIF dijaga di klausa WHERE)
+UPDATE `bri_tabungan`.`operasional`.`rekening`
+SET status_rekening = 'TERBLOKIR'
+WHERE no_rekening = '002101000000001' AND status_rekening = 'AKTIF';
+
+
+-- W-06 Memblokir sementara kartu debit
+-- Ganti <no_kartu> dengan hasil SELECT helper di atas.
+UPDATE `bri_tabungan`.`operasional`.`kartu_debit`
+SET status_kartu = 'BLOKIR_SEMENTARA'
+WHERE no_kartu = '<no_kartu>' AND status_kartu = 'AKTIF';
+
+
+-- W-07 Memproses transaksi + update saldo (bagian Couchbase)
+-- UPDATE satu dokumen bersifat atomik: baca-lalu-tulis tidak perlu round-trip.
+UPDATE `bri_tabungan`.`operasional`.`rekening`
+SET saldo_efektif = saldo_efektif + 500000,
+    saldo_tersedia = saldo_tersedia + 500000,
+    last_transaction_at = NOW_STR(),
+    tx_count = tx_count + 1
+WHERE no_rekening = '002101000000001';
+
+-- Lalu append event ke ledger Cassandra (bagian kedua W-07, PLAN.md §7).
+-- Dijalankan di Cassandra, bukan N1QL:
+--   INSERT INTO bri_tabungan.transaksi_by_rekening
+--     (no_rekening, waktu_transaksi, id_transaksi, jenis_transaksi, arah,
+--      nominal, mata_uang, id_kanal, nama_kanal, no_kartu, status_transaksi, saldo_setelah)
+--   VALUES ('002101000000001', toTimestamp(now()), 'TRX900000001', 'SETORAN', 'KREDIT',
+--     500000.00, 'IDR', 'KNL01', 'BRImo Super App', '<no_kartu>', 'BERHASIL', 151763509.16);
+
+
+-- W-08 Posting bunga bulanan (key no_rekening+periode => idempoten)
+INSERT INTO `bri_tabungan`.`operasional`.`posting_bunga` (KEY, VALUE) VALUES
+  ("posting::002101000000001::202611", {
+    "_type": "posting_bunga", "no_rekening": "002101000000001", "periode": "202611",
+    "hari_berjalan": 30, "tarif_bunga": 0.015, "bunga_kotor": 12500.00,
+    "pajak_pph_final": 2500.00, "bunga_bersih": 10000.00,
+    "tanggal_posting": "2026-11-30T23:59:59"
+  });
+
+
+-- W-09 Membuat instruksi terjadwal baru (AFT)
+INSERT INTO `bri_tabungan`.`operasional`.`instruksi_terjadwal` (KEY, VALUE) VALUES
+  ("instruksi::INSW09000000001", {
+    "_type": "instruksi_terjadwal", "id_instruksi": "INSW09000000001",
+    "jenis_instruksi": "AFT", "no_rekening_sumber": "002101000000001",
+    "no_rekening_tujuan": "002101000000004", "frekuensi": "BULANAN",
+    "hari_eksekusi": 25, "nominal_target": 1000000.00,
+    "status_instruksi": "AKTIF", "tanggal_mulai": "2026-11-21", "tanggal_selesai": null
+  });
+
+
+-- W-10 Menutup rekening
+UPDATE `bri_tabungan`.`operasional`.`rekening`
+SET status_rekening = 'DITUTUP', tanggal_tutup = '2026-11-21',
+    saldo_efektif = 0, saldo_tersedia = 0
+WHERE no_rekening = '002101000000004' AND status_rekening = 'AKTIF';

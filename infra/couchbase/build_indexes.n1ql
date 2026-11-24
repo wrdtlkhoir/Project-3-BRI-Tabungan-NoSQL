@@ -1,0 +1,23 @@
+-- Jalankan SETELAH couchbase_ddl.n1ql dan SETELAH seeding data.
+-- Semua GSI di couchbase_ddl.n1ql dibuat dengan {"defer_build": true},
+-- jadi harus di-BUILD dulu sebelum dipakai query/benchmark.
+--
+-- cbq -u Administrator -p password -f /build_indexes.n1ql
+
+BUILD INDEX ON `bri_tabungan`.`operasional`.`produk` (idx_produk_nama);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`kanal` (idx_kanal_nama);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`nasabah` (idx_nasabah_nik, idx_nasabah_tanpa_rekening);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`rekening` (idx_rek_holder, idx_rek_idle, idx_rek_unit, idx_rek_produk);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`kartu_debit` (idx_kartu_expiry, idx_kartu_rekening);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`posting_bunga` (idx_posting_rek);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`instruksi_terjadwal` (idx_instr_aktif);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`unit_kerja` (idx_unit_induk);
+
+BUILD INDEX ON `bri_tabungan`.`operasional`.`outbox` (idx_outbox_status);
+
+BUILD INDEX ON `bri_tabungan`.`operasional`.`nasabah` (idx_primary_nasabah);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`rekening` (idx_primary_rekening);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`kartu_debit` (idx_primary_kartu_debit);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`posting_bunga` (idx_primary_posting_bunga);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`instruksi_terjadwal` (idx_primary_instruksi_terjadwal);
+BUILD INDEX ON `bri_tabungan`.`operasional`.`outbox` (idx_primary_outbox);
