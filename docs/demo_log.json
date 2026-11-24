@@ -1,0 +1,1197 @@
+[
+ {
+  "judul": "Health check kedua database",
+  "method": "GET",
+  "url": "/health",
+  "request": null,
+  "status": 200,
+  "ms": 44.9,
+  "response": {
+   "couchbase": true,
+   "cassandra": true,
+   "ledger_down_simulasi": false,
+   "outbox": {
+    "PUBLISHED": 6
+   }
+  }
+ },
+ {
+  "judul": "Saldo 002101000000001 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000001",
+  "request": null,
+  "status": 200,
+  "ms": 3.7,
+  "response": {
+   "no_rekening": "002101000000001",
+   "id_produk": "PRD08",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 151763509.16,
+   "saldo_tersedia": 151713509.16,
+   "saldo_efektif_sen": 15176350916,
+   "id_unit_kerja": "UK0026",
+   "last_transaction_at": "2026-11-24T09:06:02.599328Z",
+   "tx_count": 42,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000001",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-08-12"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Saldo 002101000000004 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000004",
+  "request": null,
+  "status": 200,
+  "ms": 4.0,
+  "response": {
+   "no_rekening": "002101000000004",
+   "id_produk": "PRD06",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 268621044.53,
+   "saldo_tersedia": 268521044.53,
+   "saldo_efektif_sen": 26862104453,
+   "id_unit_kerja": "UK0022",
+   "last_transaction_at": "2026-11-19T12:42:29",
+   "tx_count": 66,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000004",
+     "peran": "PEMEGANG_UTAMA",
+     "penanda_utama": "Y",
+     "tanggal_mulai": "2025-06-16"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Setoran Rp500.000",
+  "method": "POST",
+  "url": "/transaksi/setoran",
+  "request": {
+   "no_rekening": "002101000000001",
+   "nominal": "500000.00",
+   "idempotency_key": "demo-e0ab2a-setoran"
+  },
+  "status": 200,
+  "ms": 71.9,
+  "response": {
+   "event_id": "EVT-0C13472A3384CED94E0E",
+   "jenis": "SETORAN",
+   "status": "BERHASIL",
+   "duplicate": false,
+   "saldo_setelah": "152263509.16",
+   "ledger_status": "PUBLISHED",
+   "detail": {
+    "no_rekening": "002101000000001",
+    "nominal": "500000.00",
+    "counterparty": null,
+    "waktu_event": "2026-11-24T09:38:31.121098Z"
+   }
+  }
+ },
+ {
+  "judul": "Saldo 002101000000001 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000001",
+  "request": null,
+  "status": 200,
+  "ms": 2.8,
+  "response": {
+   "no_rekening": "002101000000001",
+   "id_produk": "PRD08",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 152263509.16,
+   "saldo_tersedia": 152213509.16,
+   "saldo_efektif_sen": 15226350916,
+   "id_unit_kerja": "UK0026",
+   "last_transaction_at": "2026-11-24T09:38:31.121098Z",
+   "tx_count": 43,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000001",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-08-12"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Histori ledger (Cassandra) 3 event terbaru",
+  "method": "GET",
+  "url": "/rekening/002101000000001/histori?limit=3",
+  "request": null,
+  "status": 200,
+  "ms": 10.0,
+  "response": [
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.121000",
+    "event_id": "EVT-0C13472A3384CED94E0E",
+    "arah": "KREDIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "SETORAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "500000.00",
+    "saldo_setelah": "152263509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:06:02.599000",
+    "event_id": "EVT-B5CF2C3715B6DC1FAC58",
+    "arah": "KREDIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "SETORAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "500000.00",
+    "saldo_setelah": "151763509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-20T04:05:43",
+    "event_id": "TX2026000000000041",
+    "arah": "DEBIT",
+    "counterparty": null,
+    "id_kanal": "KNL07",
+    "jenis_event": "PENARIKAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "Kiosk Self Service",
+    "no_kartu": "5221840000000001",
+    "nominal": "1479667.32",
+    "saldo_setelah": "151263509.16",
+    "status_event": "BERHASIL",
+    "sumber": "SEED"
+   }
+  ]
+ },
+ {
+  "judul": "RETRY setoran dengan idempotency_key sama",
+  "method": "POST",
+  "url": "/transaksi/setoran",
+  "request": {
+   "no_rekening": "002101000000001",
+   "nominal": "500000.00",
+   "idempotency_key": "demo-e0ab2a-setoran"
+  },
+  "status": 200,
+  "ms": 4.3,
+  "response": {
+   "event_id": "EVT-0C13472A3384CED94E0E",
+   "jenis": "SETORAN",
+   "status": "BERHASIL",
+   "duplicate": true,
+   "saldo_setelah": "152263509.16",
+   "ledger_status": "PUBLISHED",
+   "detail": {
+    "no_rekening": "002101000000001",
+    "nominal": "500000.00",
+    "counterparty": null,
+    "waktu_event": "2026-11-24T09:38:31.121098Z"
+   }
+  }
+ },
+ {
+  "judul": "Saldo 002101000000001 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000001",
+  "request": null,
+  "status": 200,
+  "ms": 1.7,
+  "response": {
+   "no_rekening": "002101000000001",
+   "id_produk": "PRD08",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 152263509.16,
+   "saldo_tersedia": 152213509.16,
+   "saldo_efektif_sen": 15226350916,
+   "id_unit_kerja": "UK0026",
+   "last_transaction_at": "2026-11-24T09:38:31.121098Z",
+   "tx_count": 43,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000001",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-08-12"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Penarikan Rp100.000",
+  "method": "POST",
+  "url": "/transaksi/penarikan",
+  "request": {
+   "no_rekening": "002101000000001",
+   "nominal": "100000.00",
+   "idempotency_key": "demo-e0ab2a-tarik"
+  },
+  "status": 200,
+  "ms": 21.7,
+  "response": {
+   "event_id": "EVT-BCF2AC948219DBE18DB8",
+   "jenis": "PENARIKAN",
+   "status": "BERHASIL",
+   "duplicate": false,
+   "saldo_setelah": "152163509.16",
+   "ledger_status": "PUBLISHED",
+   "detail": {
+    "no_rekening": "002101000000001",
+    "nominal": "100000.00",
+    "counterparty": null,
+    "waktu_event": "2026-11-24T09:38:31.202649Z"
+   }
+  }
+ },
+ {
+  "judul": "Penarikan melebihi saldo -> ditolak",
+  "method": "POST",
+  "url": "/transaksi/penarikan",
+  "request": {
+   "no_rekening": "002101000000001",
+   "nominal": "99999999999.00",
+   "idempotency_key": "demo-e0ab2a-tarik2"
+  },
+  "status": 422,
+  "ms": 10.3,
+  "response": {
+   "detail": {
+    "code": "SALDO_TIDAK_CUKUP",
+    "message": "saldo tersedia 152,113,509.16 tidak cukup"
+   }
+  }
+ },
+ {
+  "judul": "Saldo sebelum transfer: rekening B",
+  "method": "GET",
+  "url": "/rekening/002101000000004",
+  "request": null,
+  "status": 200,
+  "ms": 3.3,
+  "response": {
+   "no_rekening": "002101000000004",
+   "id_produk": "PRD06",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 268621044.53,
+   "saldo_tersedia": 268521044.53,
+   "saldo_efektif_sen": 26862104453,
+   "id_unit_kerja": "UK0022",
+   "last_transaction_at": "2026-11-19T12:42:29",
+   "tx_count": 66,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000004",
+     "peran": "PEMEGANG_UTAMA",
+     "penanda_utama": "Y",
+     "tanggal_mulai": "2025-06-16"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Transfer A -> B Rp250.000 (1 transaksi ACID, 2 event)",
+  "method": "POST",
+  "url": "/transaksi/transfer",
+  "request": {
+   "rekening_sumber": "002101000000001",
+   "rekening_tujuan": "002101000000004",
+   "nominal": "250000.00",
+   "idempotency_key": "demo-e0ab2a-tf"
+  },
+  "status": 200,
+  "ms": 68.8,
+  "response": {
+   "event_id": "EVT-30B8721506436BD939D4-D",
+   "jenis": "TRANSFER_KELUAR",
+   "status": "BERHASIL",
+   "duplicate": false,
+   "saldo_setelah": "151913509.16",
+   "ledger_status": "PUBLISHED",
+   "detail": {
+    "no_rekening": "002101000000001",
+    "nominal": "250000.00",
+    "counterparty": "002101000000004",
+    "waktu_event": "2026-11-24T09:38:31.246408Z",
+    "event_id_kredit": "EVT-30B8721506436BD939D4-K",
+    "ledger_status_kredit": "PUBLISHED"
+   }
+  }
+ },
+ {
+  "judul": "Saldo 002101000000001 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000001",
+  "request": null,
+  "status": 200,
+  "ms": 5.9,
+  "response": {
+   "no_rekening": "002101000000001",
+   "id_produk": "PRD08",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 151913509.16,
+   "saldo_tersedia": 151863509.16,
+   "saldo_efektif_sen": 15191350916,
+   "id_unit_kerja": "UK0026",
+   "last_transaction_at": "2026-11-24T09:38:31.246408Z",
+   "tx_count": 45,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000001",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-08-12"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Saldo 002101000000004 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000004",
+  "request": null,
+  "status": 200,
+  "ms": 5.1,
+  "response": {
+   "no_rekening": "002101000000004",
+   "id_produk": "PRD06",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 268871044.53,
+   "saldo_tersedia": 268771044.53,
+   "saldo_efektif_sen": 26887104453,
+   "id_unit_kerja": "UK0022",
+   "last_transaction_at": "2026-11-24T09:38:31.246408Z",
+   "tx_count": 67,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000004",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-06-16"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Histori A",
+  "method": "GET",
+  "url": "/rekening/002101000000001/histori?limit=4",
+  "request": null,
+  "status": 200,
+  "ms": 13.9,
+  "response": [
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.246000",
+    "event_id": "EVT-30B8721506436BD939D4-D",
+    "arah": "DEBIT",
+    "counterparty": "002101000000004",
+    "id_kanal": "KNL01",
+    "jenis_event": "TRANSFER_KELUAR",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "250000.00",
+    "saldo_setelah": "151913509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.202000",
+    "event_id": "EVT-BCF2AC948219DBE18DB8",
+    "arah": "DEBIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "PENARIKAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "100000.00",
+    "saldo_setelah": "152163509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.121000",
+    "event_id": "EVT-0C13472A3384CED94E0E",
+    "arah": "KREDIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "SETORAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "500000.00",
+    "saldo_setelah": "152263509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:06:02.599000",
+    "event_id": "EVT-B5CF2C3715B6DC1FAC58",
+    "arah": "KREDIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "SETORAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "500000.00",
+    "saldo_setelah": "151763509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   }
+  ]
+ },
+ {
+  "judul": "Histori B",
+  "method": "GET",
+  "url": "/rekening/002101000000004/histori?limit=2",
+  "request": null,
+  "status": 200,
+  "ms": 12.0,
+  "response": [
+   {
+    "no_rekening": "002101000000004",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.246000",
+    "event_id": "EVT-30B8721506436BD939D4-K",
+    "arah": "KREDIT",
+    "counterparty": "002101000000001",
+    "id_kanal": "KNL01",
+    "jenis_event": "TRANSFER_MASUK",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "250000.00",
+    "saldo_setelah": "268871044.53",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000004",
+    "bulan": "202611",
+    "waktu_event": "2026-11-19T12:42:29",
+    "event_id": "TX2026000000000107",
+    "arah": "DEBIT",
+    "counterparty": null,
+    "id_kanal": "KNL05",
+    "jenis_event": "TRANSFER",
+    "mata_uang": "IDR",
+    "nama_kanal": "AgenBRILink",
+    "no_kartu": "5221840000000003",
+    "nominal": "129969.53",
+    "saldo_setelah": "268621044.53",
+    "status_event": "BERHASIL",
+    "sumber": "SEED"
+   }
+  ]
+ },
+ {
+  "judul": "Transfer gagal (saldo kurang) -> kedua saldo tidak berubah",
+  "method": "POST",
+  "url": "/transaksi/transfer",
+  "request": {
+   "rekening_sumber": "002101000000001",
+   "rekening_tujuan": "002101000000004",
+   "nominal": "99999999999.00",
+   "idempotency_key": "demo-e0ab2a-tf2"
+  },
+  "status": 422,
+  "ms": 12.6,
+  "response": {
+   "detail": {
+    "code": "SALDO_TIDAK_CUKUP",
+    "message": "saldo tersedia 151,863,509.16 tidak cukup"
+   }
+  }
+ },
+ {
+  "judul": "Saldo 002101000000001 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000001",
+  "request": null,
+  "status": 200,
+  "ms": 6.6,
+  "response": {
+   "no_rekening": "002101000000001",
+   "id_produk": "PRD08",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 151913509.16,
+   "saldo_tersedia": 151863509.16,
+   "saldo_efektif_sen": 15191350916,
+   "id_unit_kerja": "UK0026",
+   "last_transaction_at": "2026-11-24T09:38:31.246408Z",
+   "tx_count": 45,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000001",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-08-12"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Saldo 002101000000004 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000004",
+  "request": null,
+  "status": 200,
+  "ms": 3.4,
+  "response": {
+   "no_rekening": "002101000000004",
+   "id_produk": "PRD06",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 268871044.53,
+   "saldo_tersedia": 268771044.53,
+   "saldo_efektif_sen": 26887104453,
+   "id_unit_kerja": "UK0022",
+   "last_transaction_at": "2026-11-24T09:38:31.246408Z",
+   "tx_count": 67,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000004",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-06-16"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "SIMULASI: Cassandra mati",
+  "method": "POST",
+  "url": "/admin/chaos/ledger?down=true",
+  "request": null,
+  "status": 200,
+  "ms": 2.4,
+  "response": {
+   "ledger_down_simulasi": true
+  }
+ },
+ {
+  "judul": "Setoran saat Cassandra mati (saldo tetap naik, event PENDING)",
+  "method": "POST",
+  "url": "/transaksi/setoran",
+  "request": {
+   "no_rekening": "002101000000001",
+   "nominal": "75000.00",
+   "idempotency_key": "demo-e0ab2a-chaos"
+  },
+  "status": 200,
+  "ms": 40.8,
+  "response": {
+   "event_id": "EVT-2AAB026AF8DB13E80DD9",
+   "jenis": "SETORAN",
+   "status": "BERHASIL",
+   "duplicate": false,
+   "saldo_setelah": "151988509.16",
+   "ledger_status": "PENDING",
+   "detail": {
+    "no_rekening": "002101000000001",
+    "nominal": "75000.00",
+    "counterparty": null,
+    "waktu_event": "2026-11-24T09:38:31.372835Z"
+   }
+  }
+ },
+ {
+  "judul": "Saldo 002101000000001 (Couchbase)",
+  "method": "GET",
+  "url": "/rekening/002101000000001",
+  "request": null,
+  "status": 200,
+  "ms": 11.5,
+  "response": {
+   "no_rekening": "002101000000001",
+   "id_produk": "PRD08",
+   "status_rekening": "AKTIF",
+   "saldo_efektif": 151988509.16,
+   "saldo_tersedia": 151938509.16,
+   "saldo_efektif_sen": 15198850916,
+   "id_unit_kerja": "UK0026",
+   "last_transaction_at": "2026-11-24T09:38:31.372835Z",
+   "tx_count": 46,
+   "pemegang_rekening": [
+    {
+     "id_nasabah": "NSB000000001",
+     "penanda_utama": "Y",
+     "peran": "PEMEGANG_UTAMA",
+     "tanggal_mulai": "2025-08-12"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Outbox: event menunggu",
+  "method": "GET",
+  "url": "/admin/outbox",
+  "request": null,
+  "status": 200,
+  "ms": 23.9,
+  "response": {
+   "ringkasan": {
+    "PUBLISHED": 10,
+    "PENDING": 1
+   },
+   "pending": [
+    {
+     "event_id": "EVT-2AAB026AF8DB13E80DD9",
+     "jenis": "SETORAN",
+     "attempts": 1,
+     "last_error": "Cassandra tidak dapat dijangkau (simulasi)"
+    }
+   ]
+  }
+ },
+ {
+  "judul": "Histori A tanpa event baru (ledger belum terbit)",
+  "method": "GET",
+  "url": "/rekening/002101000000001/histori?limit=2",
+  "request": null,
+  "status": 200,
+  "ms": 13.9,
+  "response": [
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.246000",
+    "event_id": "EVT-30B8721506436BD939D4-D",
+    "arah": "DEBIT",
+    "counterparty": "002101000000004",
+    "id_kanal": "KNL01",
+    "jenis_event": "TRANSFER_KELUAR",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "250000.00",
+    "saldo_setelah": "151913509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.202000",
+    "event_id": "EVT-BCF2AC948219DBE18DB8",
+    "arah": "DEBIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "PENARIKAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "100000.00",
+    "saldo_setelah": "152163509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   }
+  ]
+ },
+ {
+  "judul": "SIMULASI: Cassandra pulih",
+  "method": "POST",
+  "url": "/admin/chaos/ledger?down=false",
+  "request": null,
+  "status": 200,
+  "ms": 2.6,
+  "response": {
+   "ledger_down_simulasi": false
+  }
+ },
+ {
+  "judul": "Relay outbox -> Cassandra",
+  "method": "POST",
+  "url": "/admin/outbox/relay",
+  "request": null,
+  "status": 200,
+  "ms": 15.7,
+  "response": {
+   "diproses": 1,
+   "berhasil": 1,
+   "sisa": 0
+  }
+ },
+ {
+  "judul": "Histori A: event muncul tepat 1 kali",
+  "method": "GET",
+  "url": "/rekening/002101000000001/histori?limit=3",
+  "request": null,
+  "status": 200,
+  "ms": 6.7,
+  "response": [
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.372000",
+    "event_id": "EVT-2AAB026AF8DB13E80DD9",
+    "arah": "KREDIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "SETORAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "75000.00",
+    "saldo_setelah": "151988509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.246000",
+    "event_id": "EVT-30B8721506436BD939D4-D",
+    "arah": "DEBIT",
+    "counterparty": "002101000000004",
+    "id_kanal": "KNL01",
+    "jenis_event": "TRANSFER_KELUAR",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "250000.00",
+    "saldo_setelah": "151913509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   },
+   {
+    "no_rekening": "002101000000001",
+    "bulan": "202611",
+    "waktu_event": "2026-11-24T09:38:31.202000",
+    "event_id": "EVT-BCF2AC948219DBE18DB8",
+    "arah": "DEBIT",
+    "counterparty": null,
+    "id_kanal": "KNL01",
+    "jenis_event": "PENARIKAN",
+    "mata_uang": "IDR",
+    "nama_kanal": "BRImo Super App",
+    "no_kartu": null,
+    "nominal": "100000.00",
+    "saldo_setelah": "152163509.16",
+    "status_event": "BERHASIL",
+    "sumber": "API"
+   }
+  ]
+ },
+ {
+  "judul": "Outbox setelah relay",
+  "method": "GET",
+  "url": "/admin/outbox",
+  "request": null,
+  "status": 200,
+  "ms": 140.7,
+  "response": {
+   "ringkasan": {
+    "PUBLISHED": 11
+   },
+   "pending": []
+  }
+ },
+ {
+  "judul": "R-03 laporan per kanal (Cassandra)",
+  "method": "GET",
+  "url": "/laporan/R-03?id_kanal=KNL01&dari_bulan=202607&sampai_bulan=202610",
+  "request": null,
+  "status": 200,
+  "ms": 596.0,
+  "response": [
+   {
+    "bulan": "202607",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PEMBAYARAN",
+    "jumlah_transaksi": 1066,
+    "total_nominal": "1095081320.38",
+    "rata_rata_nominal": "1027280.79"
+   },
+   {
+    "bulan": "202607",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "BIAYA",
+    "jumlah_transaksi": 1149,
+    "total_nominal": "1169094195.96",
+    "rata_rata_nominal": "1017488.42"
+   },
+   {
+    "bulan": "202607",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PENARIKAN",
+    "jumlah_transaksi": 1098,
+    "total_nominal": "1095816609.12",
+    "rata_rata_nominal": "998011.48"
+   },
+   {
+    "bulan": "202607",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "TRANSFER",
+    "jumlah_transaksi": 1080,
+    "total_nominal": "1069819295.01",
+    "rata_rata_nominal": "990573.42"
+   },
+   {
+    "bulan": "202607",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "SETORAN",
+    "jumlah_transaksi": 1097,
+    "total_nominal": "1116986776.53",
+    "rata_rata_nominal": "1018219.49"
+   },
+   {
+    "bulan": "202608",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PENARIKAN",
+    "jumlah_transaksi": 1142,
+    "total_nominal": "1161606000.04",
+    "rata_rata_nominal": "1017168.13"
+   },
+   {
+    "bulan": "202608",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "TRANSFER",
+    "jumlah_transaksi": 1076,
+    "total_nominal": "1087648433.22",
+    "rata_rata_nominal": "1010825.68"
+   },
+   {
+    "bulan": "202608",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "SETORAN",
+    "jumlah_transaksi": 1143,
+    "total_nominal": "1157694509.29",
+    "rata_rata_nominal": "1012856.09"
+   },
+   {
+    "bulan": "202608",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PEMBAYARAN",
+    "jumlah_transaksi": 1064,
+    "total_nominal": "1097811355.78",
+    "rata_rata_nominal": "1031777.59"
+   },
+   {
+    "bulan": "202608",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "BIAYA",
+    "jumlah_transaksi": 1066,
+    "total_nominal": "1049291422.08",
+    "rata_rata_nominal": "984325.91"
+   },
+   {
+    "bulan": "202609",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "SETORAN",
+    "jumlah_transaksi": 1069,
+    "total_nominal": "1080911261.51",
+    "rata_rata_nominal": "1011142.43"
+   },
+   {
+    "bulan": "202609",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PEMBAYARAN",
+    "jumlah_transaksi": 1044,
+    "total_nominal": "1057564037.36",
+    "rata_rata_nominal": "1012992.37"
+   },
+   {
+    "bulan": "202609",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PENARIKAN",
+    "jumlah_transaksi": 1011,
+    "total_nominal": "1012071875.16",
+    "rata_rata_nominal": "1001060.21"
+   },
+   {
+    "bulan": "202609",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "BIAYA",
+    "jumlah_transaksi": 1095,
+    "total_nominal": "1097275427.28",
+    "rata_rata_nominal": "1002078.02"
+   },
+   {
+    "bulan": "202609",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "TRANSFER",
+    "jumlah_transaksi": 990,
+    "total_nominal": "986403809.31",
+    "rata_rata_nominal": "996367.48"
+   },
+   {
+    "bulan": "202610",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "BIAYA",
+    "jumlah_transaksi": 1049,
+    "total_nominal": "1060080423.94",
+    "rata_rata_nominal": "1010562.84"
+   },
+   {
+    "bulan": "202610",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PEMBAYARAN",
+    "jumlah_transaksi": 1065,
+    "total_nominal": "1053746999.94",
+    "rata_rata_nominal": "989433.80"
+   },
+   {
+    "bulan": "202610",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "PENARIKAN",
+    "jumlah_transaksi": 1084,
+    "total_nominal": "1128763941.03",
+    "rata_rata_nominal": "1041295.15"
+   },
+   {
+    "bulan": "202610",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "TRANSFER",
+    "jumlah_transaksi": 1117,
+    "total_nominal": "1103199453.41",
+    "rata_rata_nominal": "987644.99"
+   },
+   {
+    "bulan": "202610",
+    "id_kanal": "KNL01",
+    "jenis_transaksi": "SETORAN",
+    "jumlah_transaksi": 1132,
+    "total_nominal": "1160047704.90",
+    "rata_rata_nominal": "1024777.12"
+   }
+  ]
+ },
+ {
+  "judul": "R-10 distribusi per produk (Couchbase)",
+  "method": "GET",
+  "url": "/laporan/R-10",
+  "request": null,
+  "status": 200,
+  "ms": 259.1,
+  "response": [
+   {
+    "id_produk": "PRD08",
+    "jumlah_rekening": 1247,
+    "keluarga_produk": "TABUNGANKU",
+    "nama_produk": "Tabunganku BRI",
+    "total_saldo": 280839326180.2
+   },
+   {
+    "id_produk": "PRD02",
+    "jumlah_rekening": 1238,
+    "keluarga_produk": "BRITAMA",
+    "nama_produk": "BritAma Bisnis",
+    "total_saldo": 270844003713.9
+   },
+   {
+    "id_produk": "PRD04",
+    "jumlah_rekening": 1235,
+    "keluarga_produk": "SIMPEDES",
+    "nama_produk": "Simpedes UMi",
+    "total_saldo": 267684322816.42
+   },
+   {
+    "id_produk": "PRD10",
+    "jumlah_rekening": 1233,
+    "keluarga_produk": "SIMUDA",
+    "nama_produk": "BritAma Muda",
+    "total_saldo": 269134468247.92
+   },
+   {
+    "id_produk": "PRD09",
+    "jumlah_rekening": 1212,
+    "keluarga_produk": "BRITAMA",
+    "nama_produk": "BritAma Valas",
+    "total_saldo": 272199114788.57
+   },
+   {
+    "id_produk": "PRD06",
+    "jumlah_rekening": 1205,
+    "keluarga_produk": "SIMPEL",
+    "nama_produk": "SimPel BRI",
+    "total_saldo": 261647868488.03
+   },
+   {
+    "id_produk": "PRD05",
+    "jumlah_rekening": 1197,
+    "keluarga_produk": "JUNIO",
+    "nama_produk": "BRI Junio",
+    "total_saldo": 261806279652.2
+   },
+   {
+    "id_produk": "PRD03",
+    "jumlah_rekening": 1176,
+    "keluarga_produk": "SIMPEDES",
+    "nama_produk": "Simpedes Utama",
+    "total_saldo": 258116724041.42
+   },
+   {
+    "id_produk": "PRD01",
+    "jumlah_rekening": 1140,
+    "keluarga_produk": "BRITAMA",
+    "nama_produk": "BritAma Umum",
+    "total_saldo": 246957879377.4
+   },
+   {
+    "id_produk": "PRD07",
+    "jumlah_rekening": 1117,
+    "keluarga_produk": "HAJI",
+    "nama_produk": "Tabungan Haji BRI",
+    "total_saldo": 244417794393.37
+   }
+  ]
+ },
+ {
+  "judul": "R-02 nasabah >1 rekening (Couchbase)",
+  "method": "GET",
+  "url": "/laporan/R-02",
+  "request": null,
+  "status": 200,
+  "ms": 1790.5,
+  "response": [
+   {
+    "id_nasabah": "NSB000000396",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "R. Yani Hariyah, S.Gz",
+    "total_saldo_efektif": 1229869699.32
+   },
+   {
+    "id_nasabah": "NSB000000626",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Indah Iswahyudi, S.Gz",
+    "total_saldo_efektif": 1165399573.23
+   },
+   {
+    "id_nasabah": "NSB000000155",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Mariadi Iswahyudi",
+    "total_saldo_efektif": 1164324072.3
+   },
+   {
+    "id_nasabah": "NSB000000120",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Harimurti Andriani",
+    "total_saldo_efektif": 1150502445.13
+   },
+   {
+    "id_nasabah": "NSB000006442",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "drg. Ade Pranowo, M.Pd",
+    "total_saldo_efektif": 1140472907.16
+   },
+   {
+    "id_nasabah": "NSB000001690",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Baktiadi Habibi",
+    "total_saldo_efektif": 1127114517.57
+   },
+   {
+    "id_nasabah": "NSB000001482",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Tami Wibisono",
+    "total_saldo_efektif": 1126487675.39
+   },
+   {
+    "id_nasabah": "NSB000002674",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "dr. Sarah Kurniawan, M.Ak",
+    "total_saldo_efektif": 1106156293.35
+   },
+   {
+    "id_nasabah": "NSB000001693",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Gadang Oktaviani",
+    "total_saldo_efektif": 1102805262.77
+   },
+   {
+    "id_nasabah": "NSB000001119",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Karman Mansur",
+    "total_saldo_efektif": 1095422886.67
+   },
+   {
+    "id_nasabah": "NSB000001054",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Padma Nasyiah",
+    "total_saldo_efektif": 1093494414.09
+   },
+   {
+    "id_nasabah": "NSB000000603",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Eluh Permata",
+    "total_saldo_efektif": 1088909125.18
+   },
+   {
+    "id_nasabah": "NSB000001339",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "KH. Garang Haryanto, S.E.I",
+    "total_saldo_efektif": 1088879628.18
+   },
+   {
+    "id_nasabah": "NSB000007307",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Ellis Hidayanto",
+    "total_saldo_efektif": 1087087615.84
+   },
+   {
+    "id_nasabah": "NSB000000149",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Sabrina Pratiwi",
+    "total_saldo_efektif": 1070876290.83
+   },
+   {
+    "id_nasabah": "NSB000000760",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Siska Maheswara",
+    "total_saldo_efektif": 1064153013.23
+   },
+   {
+    "id_nasabah": "NSB000001900",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Wirda Haryanti",
+    "total_saldo_efektif": 1061294231.9
+   },
+   {
+    "id_nasabah": "NSB000000199",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Prayoga Suwarno",
+    "total_saldo_efektif": 1017531477.65
+   },
+   {
+    "id_nasabah": "NSB000002168",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Pangestu Hariyah, M.Kom.",
+    "total_saldo_efektif": 1013963825.52
+   },
+   {
+    "id_nasabah": "NSB000002192",
+    "jumlah_rekening_aktif": 3,
+    "nama_lengkap": "Leo Uwais, S.Gz",
+    "total_saldo_efektif": 1011874723.22
+   }
+  ]
+ }
+]

@@ -1,0 +1,14 @@
+[OK  ] Couchbase produk: sumber PG=10  target=10
+[OK  ] Couchbase unit_kerja: sumber PG=50  target=50
+[OK  ] Couchbase kanal: sumber PG=7  target=7
+[OK  ] Couchbase nasabah: sumber PG=10,000  target=10,000
+[OK  ] Couchbase rekening: sumber PG=12,000  target=12,000
+[OK  ] Couchbase kartu_debit: sumber PG=8,214  target=8,214
+[OK  ] Couchbase posting_bunga: sumber PG=20,000  target=20,000
+[OK  ] Couchbase instruksi_terjadwal: sumber PG=1,500  target=1,500
+[OK  ] Rekonsiliasi total saldo Couchbase = seed PG + net event ledger (sen): sumber PG=263,364,663,169,943  target=263,364,663,169,943
+[OK  ] Cassandra ledger (ledger_by_kanal_bulan, event SEED saja): sumber PG=494,347  target=494,347
+       (event dari API setelah seed: 1)
+[OK  ] rekening 002101000000001: tx_count Couchbase vs event ledger: sumber PG=42  target=42
+[OK  ] rekening 002101000000004: tx_count Couchbase vs event ledger: sumber PG=66  target=66
+HASIL VALIDASI: SEMUA OK

@@ -1,0 +1,34 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.15, pytest-9.2.0, pluggy-1.7.0 -- E:\SEMESTER_7\data management\projek2\bri-tabungan-nosql\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: E:\SEMESTER_7\data management\projek2\bri-tabungan-nosql
+plugins: anyio-4.16.0
+collecting ... collected 15 items
+
+tests/test_integration.py::test_setoran_ubah_saldo_dan_catat_event PASSED [  6%]
+tests/test_integration.py::test_idempotensi_retry_tidak_ganda PASSED     [ 13%]
+tests/test_integration.py::test_penarikan_saldo_tidak_cukup_tidak_menulis_apa_apa PASSED [ 20%]
+tests/test_integration.py::test_transfer_atomik_dua_event PASSED         [ 26%]
+tests/test_integration.py::test_transfer_gagal_tidak_mengubah_kedua_saldo PASSED [ 33%]
+tests/test_integration.py::test_cassandra_down_event_aman_di_outbox_lalu_pulih PASSED [ 40%]
+tests/test_integration.py::test_histori_terurut_terbaru_dulu PASSED      [ 46%]
+tests/test_integration.py::test_partisi_per_bulan_terbatas PASSED        [ 53%]
+tests/test_unit.py::test_to_sen_tanpa_floating_point PASSED              [ 60%]
+tests/test_unit.py::test_sen_to_decimal_roundtrip PASSED                 [ 66%]
+tests/test_unit.py::test_event_base_deterministik PASSED                 [ 73%]
+tests/test_unit.py::test_bulan_partisi PASSED                            [ 80%]
+tests/test_unit.py::test_apply_setoran PASSED                            [ 86%]
+tests/test_unit.py::test_apply_penarikan_saldo_kurang PASSED             [ 93%]
+tests/test_unit.py::test_apply_rekening_tidak_aktif PASSED               [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  E:\SEMESTER_7\data management\projek2\bri-tabungan-nosql\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_integration.py::test_setoran_ubah_saldo_dan_catat_event
+  E:\SEMESTER_7\data management\projek2\bri-tabungan-nosql\app\database\cassandra_db.py:31: DeprecationWarning: Setting the consistency level at the session level will be removed in 4.0. Consider using execution profiles and setting the desired consistency level to the EXEC_PROFILE_DEFAULT profile.
+    session.default_consistency_level = ConsistencyLevel.ONE  # single node lokal; produksi: LOCAL_QUORUM
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================== 15 passed, 2 warnings in 76.97s (0:01:16) ==================
