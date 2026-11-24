@@ -1,0 +1,335 @@
+{
+ "id": "2027b31a6ded4007a5f1698f4361a417",
+ "runs": 5,
+ "warmup": 1,
+ "lingkungan": {
+  "waktu": "2026-11-24T15:13:01.045547+00:00",
+  "python": "3.13.15",
+  "os": "Windows-11-10.0.26200-SP0",
+  "commit": "641538a",
+  "cassandra_version": "5.0.9",
+  "couchbase_version": "7.6.1-N1QL"
+ },
+ "hasil": [
+  {
+   "id": "W-01",
+   "title": "Daftarkan nasabah baru",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    26.365,
+    18.885,
+    16.192,
+    19.721,
+    24.311
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 26.365,
+     "couchbase_ms": 26.24,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.124,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 18.885,
+     "couchbase_ms": 18.79,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.096,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 16.192,
+     "couchbase_ms": 15.721,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.472,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 19.721,
+     "couchbase_ms": 19.607,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.114,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 24.311,
+     "couchbase_ms": 23.828,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.482,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 26.365,
+   "pemulihan_baseline": true,
+   "min": 16.192,
+   "avg": 21.095,
+   "median": 19.721,
+   "p95": 26.365,
+   "max": 26.365,
+   "avg_tanpa_cold": 19.777,
+   "avg_couchbase_ms": 20.837,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.258,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-02",
+   "title": "Buka rekening tabungan baru",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    65.513,
+    23.277,
+    31.98,
+    17.268,
+    13.753
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 65.513,
+     "couchbase_ms": 65.306,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.207,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 23.277,
+     "couchbase_ms": 23.04,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.238,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 31.98,
+     "couchbase_ms": 31.776,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.204,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 17.268,
+     "couchbase_ms": 17.032,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.236,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 13.753,
+     "couchbase_ms": 13.559,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.194,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 65.513,
+   "pemulihan_baseline": true,
+   "min": 13.753,
+   "avg": 30.358,
+   "median": 23.277,
+   "p95": 65.513,
+   "max": 65.513,
+   "avg_tanpa_cold": 21.57,
+   "avg_couchbase_ms": 30.143,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.216,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-03",
+   "title": "Catat pemegang rekening",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    10.825,
+    9.23,
+    9.099,
+    8.44,
+    8.699
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 10.825,
+     "couchbase_ms": 10.765,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.059,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 9.23,
+     "couchbase_ms": 9.179,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.052,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 9.099,
+     "couchbase_ms": 9.038,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.061,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 8.44,
+     "couchbase_ms": 8.393,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.047,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 8.699,
+     "couchbase_ms": 8.633,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.066,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 10.825,
+   "pemulihan_baseline": true,
+   "min": 8.44,
+   "avg": 9.259,
+   "median": 9.099,
+   "p95": 10.825,
+   "max": 10.825,
+   "avg_tanpa_cold": 8.867,
+   "avg_couchbase_ms": 9.202,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.057,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-04",
+   "title": "Daftarkan kartu debit",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    1.994,
+    1.878,
+    2.155,
+    1.86,
+    2.463
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 1.994,
+     "couchbase_ms": 1.876,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.118,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.878,
+     "couchbase_ms": 1.768,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.11,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 2.155,
+     "couchbase_ms": 2.021,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.134,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.86,
+     "couchbase_ms": 1.733,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.127,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 2.463,
+     "couchbase_ms": 2.354,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.109,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 1.994,
+   "pemulihan_baseline": true,
+   "min": 1.86,
+   "avg": 2.07,
+   "median": 1.994,
+   "p95": 2.463,
+   "max": 2.463,
+   "avg_tanpa_cold": 2.089,
+   "avg_couchbase_ms": 1.95,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.12,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-05",
+   "title": "Blokir rekening",
+   "kind": "W",
+   "db": "Keduanya",
+   "runs_ms": [
+    24.098,
+    27.834,
+    24.098,
+    23.215,
+    23.293
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 24.098,
+     "couchbase_ms": 18.676,
+     "cassandra_ms": 5.107,
+     "app_ms": 0.315,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 27.834,
+     "couchbase_ms": 22.219,
+     "cassandra_ms": 5.263,
+     "app_ms": 0.351,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 24.098,
+     "couchbase_ms": 17.986,
+     "cassandra_ms": 5.76,
+     "app_ms": 0.351,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 23.215,
+     "couchbase_ms": 17.93,
+     "cassandra_ms": 4.99,
+     "app_ms": 0.296,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 23.293,
+     "couchbase_ms": 18.188,
+     "cassandra_ms": 4.829,
+     "app_ms": 0.276,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 24.098,
+   "pemulihan_baseline": true,
+   "min": 23.215,
+   "avg": 24.508,
+   "median": 24.098,
+   "p95": 27.834,
+   "max": 27.834,
+   "avg_tanpa_cold": 24.61,
+   "avg_couchbase_ms": 19.0,
+   "avg_cassandra_ms": 5.19,
+   "avg_app_ms": 0.318,
+   "avg_server_exec_ms": null
+  }
+ ]
+}

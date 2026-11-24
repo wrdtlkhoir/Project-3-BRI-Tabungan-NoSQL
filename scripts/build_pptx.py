@@ -130,6 +130,45 @@ table(s, 0.5, 1.3, 12.3, rows, [2.2, 4.9, 2.2, 3.0], size=13, row_h=0.5)
 text(s, 0.5, 6.0, 12.3, 1.2, "Tidak diterjemahkan langsung: JOIN & NOT EXISTS atas transaksi (R-01, R-03, R-04) → denormalisasi nama kanal ke event, atribut turunan last_transaction_at, dan agregasi di aplikasi. FK/CHECK → validasi di service layer.", 14, False, GREY)
 notes(s, "Prinsipnya: data terkini dan operasional ke Couchbase, histori ke Cassandra. Query yang tidak bisa diterjemahkan 1:1 dijelaskan alasannya: Cassandra tidak punya JOIN, jadi nama kanal disimpan di event.")
 
+# ============ 5b. Alasan Couchbase (main DB)
+s = prs.slides.add_slide(BLANK); header(s, "Mengapa Couchbase dipilih sebagai main database", "Data operasional dan saldo berada di sini")
+bullets(s, 0.6, 1.4, 12.1, 5.6, [
+    "Model dokumen cocok dengan data bank||: rekening menyimpan pemegang_rekening, nasabah menyimpan rekening_refs; satu baca = satu entitas lengkap, tanpa JOIN.",
+    "Transaksi ACID multi-dokumen||: saldo + dokumen outbox dalam satu transaksi (SDK); W-01, W-02, W-03 menjaga dua dokumen tetap konsisten.",
+    "SQL++ (N1QL)||: query Project 2 (agregasi, JOIN KEYS, UNNEST) bisa diterjemahkan langsung; 18 dari 20 query ada di sini.",
+    "Key-Value + indeks GSI||: akses per kunci (rekening::<no>) sangat cepat, tulis 1 dokumen sekitar 2 ms; laporan memakai indeks sekunder.",
+    "Satu sumber kebenaran saldo||: saldo (integer sen) hanya ditulis di Couchbase, sehingga tidak ada saldo ganda di dua database.",
+    "Mudah dijalankan lokal||: Community Edition 7.6.1 di Docker, satu node.",
+], 17, gap=10)
+notes(s, "Alasan inti: data operasional bank berbentuk agregat (rekening beserta pemegangnya) dan butuh transaksi atomik. Couchbase memberi keduanya, ditambah SQL++ sehingga query Project 2 tidak perlu ditulis ulang dari nol.")
+
+# ============ 5c. Alasan Cassandra (support DB)
+s = prs.slides.add_slide(BLANK); header(s, "Mengapa Cassandra dipilih sebagai support database", "Perannya: event ledger append-only (riwayat transaksi)")
+bullets(s, 0.6, 1.4, 6.0, 5.6, [
+    "Tulis sangat cepat||: arsitektur LSM; cocok untuk catatan transaksi yang terus bertambah.",
+    "Data deret waktu||: partition key (no_rekening, bulan) + clustering waktu; riwayat satu rekening dibaca dari satu partisi terurut.",
+    "Append-only dan idempoten||: event tidak diubah; kunci event + idempotency key mencegah event ganda.",
+    "Mudah diskalakan||: partisi per rekening-bulan mencegah partisi raksasa."], 16, gap=10)
+bullets(s, 6.9, 1.4, 6.0, 5.6, [
+    "Entitas di Cassandra||: ledger_by_rekening, ledger_event_by_id, ledger_by_kanal_bulan (R-01, R-03, W-07).",
+    "Entitas di Couchbase||: nasabah, rekening, kartu, produk, unit kerja, posting bunga, instruksi, outbox (R-02, R-04..R-10, W-01..W-10).",
+    "Alur||: transaksi uang ditulis di Couchbase bersama outbox; relay menerbitkan event ke Cassandra secara idempoten.",
+    "Konsekuensi||: saldo konsisten; ledger eventual (jeda singkat)."], 16, gap=10)
+notes(s, "Cassandra bukan pengganti Couchbase. Ia pendukung untuk riwayat yang bertambah terus dan dibaca per rekening. Tidak semua query ada di dua database; yang penting 20 query tercakup di salah satunya.")
+
+# ============ 5d. Tantangan
+s = prs.slides.add_slide(BLANK); header(s, "Potensi kesulitan dan tantangan implementasi", "Dan bagaimana kami menanganinya")
+rows = [["Tantangan", "Penanganan"],
+        ["Tidak ada distributed transaction Couchbase + Cassandra", "Transactional Outbox + idempotency key; ledger eventual"],
+        ["Cassandra tanpa JOIN / UNIQUE", "Denormalisasi nama kanal; penjaga NIK lewat dokumen nik::<nik> di Couchbase"],
+        ["Dua dokumen harus berubah bersama", "Transaksi ACID (W-01, W-02, W-03, W-05)"],
+        ["Uang tipe float menimbulkan selisih", "Disimpan integer sen (saldo_efektif_sen)"],
+        ["Data harus identik di kedua DBMS", "Satu dump PostgreSQL Project 2; validasi seed + rekonsiliasi"],
+        ["Profil query terbatas di Community Edition", "EXPLAIN + metrik executionTime; profile timings hanya Enterprise"],
+        ["Lingkungan lokal terbatas (RAM, Docker/WSL)", "Kuota Couchbase diperkecil, satu node, retry koneksi"]]
+table(s, 0.5, 1.3, 12.3, rows, [5.6, 6.7], size=14, row_h=0.62)
+notes(s, "Tantangan utama adalah menjaga konsistensi tanpa transaksi lintas database. Jawabannya outbox. Lalu keterbatasan model Cassandra dan keterbatasan edisi komunitas.")
+
 # ============ 6. Model data
 s = prs.slides.add_slide(BLANK); header(s, "Model data nyata di kedua database", "Dokumen operasional (Couchbase) dan event ledger (Cassandra)")
 image(s, "11_dokumen_couchbase.png", 0.4, 1.2, 6.2, 5.6); image(s, "12_ledger_cqlsh.png", 6.7, 1.2, 6.3, 5.6)
