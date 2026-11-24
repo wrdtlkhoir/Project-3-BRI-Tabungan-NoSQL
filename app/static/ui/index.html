@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRI Tabungan NoSQL — Query Explorer & Benchmark</title>
+<link rel="stylesheet" href="/ui/static/style.css">
+</head>
+<body>
+<header>
+  <div><h1>BRI Tabungan NoSQL</h1><div class="sub">Couchbase (main) + Cassandra (event ledger) · Query Explorer &amp; Benchmark</div></div>
+  <nav id="tabs">
+    <button data-tab="status" class="active">Status</button>
+    <button data-tab="explorer">Query Explorer</button>
+    <button data-tab="benchmark">Benchmark</button>
+    <button data-tab="transaksi">Transaksi</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-status" class="tab active"></section>
+  <section id="tab-explorer" class="tab"></section>
+  <section id="tab-benchmark" class="tab"></section>
+  <section id="tab-transaksi" class="tab"></section>
+</main>
+<script src="/ui/static/app.js"></script>
+</body>
+</html>
