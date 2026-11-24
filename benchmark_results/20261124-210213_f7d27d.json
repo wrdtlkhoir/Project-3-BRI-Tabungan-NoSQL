@@ -1,0 +1,1340 @@
+{
+ "id": "f7d27d4cb2554193b3e30d531b64056a",
+ "runs": 5,
+ "warmup": 1,
+ "lingkungan": {
+  "waktu": "2026-11-24T14:02:13.566011+00:00",
+  "python": "3.13.15",
+  "os": "Windows-11-10.0.26200-SP0",
+  "commit": "1336176",
+  "cassandra_version": "5.0.9",
+  "couchbase_version": "7.6.1-N1QL"
+ },
+ "hasil": [
+  {
+   "id": "R-01",
+   "title": "Riwayat transaksi rekening",
+   "kind": "R",
+   "db": "Cassandra",
+   "runs_ms": [
+    75.742,
+    51.639,
+    48.843,
+    46.995,
+    48.978
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 75.742,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 75.372,
+     "app_ms": 0.37,
+     "rows_returned": 162
+    },
+    {
+     "total_ms": 51.639,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 51.278,
+     "app_ms": 0.361,
+     "rows_returned": 162
+    },
+    {
+     "total_ms": 48.843,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 48.493,
+     "app_ms": 0.351,
+     "rows_returned": 162
+    },
+    {
+     "total_ms": 46.995,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 46.587,
+     "app_ms": 0.408,
+     "rows_returned": 162
+    },
+    {
+     "total_ms": 48.978,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 48.62,
+     "app_ms": 0.358,
+     "rows_returned": 162
+    }
+   ],
+   "errors": [],
+   "rows": 162,
+   "cold_ms": 75.742,
+   "pemulihan_baseline": null,
+   "min": 46.995,
+   "avg": 54.439,
+   "median": 48.978,
+   "p95": 75.742,
+   "max": 75.742,
+   "avg_tanpa_cold": 49.114,
+   "avg_couchbase_ms": 0.0,
+   "avg_cassandra_ms": 54.07,
+   "avg_app_ms": 0.37,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "R-02",
+   "title": "Nasabah dengan >1 rekening aktif",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    466.966,
+    404.93,
+    719.457,
+    511.459,
+    480.384
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 466.966,
+     "couchbase_ms": 466.902,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.064,
+     "rows_returned": 2657,
+     "server_exec_ms": 420.866
+    },
+    {
+     "total_ms": 404.93,
+     "couchbase_ms": 404.877,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.054,
+     "rows_returned": 2657,
+     "server_exec_ms": 387.996
+    },
+    {
+     "total_ms": 719.457,
+     "couchbase_ms": 719.361,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.096,
+     "rows_returned": 2657,
+     "server_exec_ms": 666.661
+    },
+    {
+     "total_ms": 511.459,
+     "couchbase_ms": 511.391,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.067,
+     "rows_returned": 2657,
+     "server_exec_ms": 480.65
+    },
+    {
+     "total_ms": 480.384,
+     "couchbase_ms": 480.332,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.053,
+     "rows_returned": 2657,
+     "server_exec_ms": 441.738
+    }
+   ],
+   "errors": [],
+   "rows": 2657,
+   "cold_ms": 466.966,
+   "pemulihan_baseline": null,
+   "min": 404.93,
+   "avg": 516.639,
+   "median": 480.384,
+   "p95": 719.457,
+   "max": 719.457,
+   "avg_tanpa_cold": 529.058,
+   "avg_couchbase_ms": 516.573,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.067,
+   "avg_server_exec_ms": 479.582
+  },
+  {
+   "id": "R-03",
+   "title": "Laporan transaksi bulanan per kanal",
+   "kind": "R",
+   "db": "Cassandra",
+   "runs_ms": [
+    451.037,
+    533.85,
+    426.157,
+    479.349,
+    477.836
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 451.037,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 451.012,
+     "app_ms": 0.026,
+     "rows_returned": 57
+    },
+    {
+     "total_ms": 533.85,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 533.829,
+     "app_ms": 0.021,
+     "rows_returned": 57
+    },
+    {
+     "total_ms": 426.157,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 426.132,
+     "app_ms": 0.025,
+     "rows_returned": 57
+    },
+    {
+     "total_ms": 479.349,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 479.325,
+     "app_ms": 0.024,
+     "rows_returned": 57
+    },
+    {
+     "total_ms": 477.836,
+     "couchbase_ms": 0.0,
+     "cassandra_ms": 477.802,
+     "app_ms": 0.034,
+     "rows_returned": 57
+    }
+   ],
+   "errors": [],
+   "rows": 57,
+   "cold_ms": 451.037,
+   "pemulihan_baseline": null,
+   "min": 426.157,
+   "avg": 473.646,
+   "median": 477.836,
+   "p95": 533.85,
+   "max": 533.85,
+   "avg_tanpa_cold": 479.298,
+   "avg_couchbase_ms": 0.0,
+   "avg_cassandra_ms": 473.62,
+   "avg_app_ms": 0.026,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "R-04",
+   "title": "Rekening idle (tanpa transaksi > N hari)",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    85.889,
+    99.79,
+    89.757,
+    77.137,
+    87.987
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 85.889,
+     "couchbase_ms": 85.82,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.069,
+     "rows_returned": 2047,
+     "server_exec_ms": 62.783
+    },
+    {
+     "total_ms": 99.79,
+     "couchbase_ms": 99.721,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.069,
+     "rows_returned": 2047,
+     "server_exec_ms": 62.346
+    },
+    {
+     "total_ms": 89.757,
+     "couchbase_ms": 89.689,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.068,
+     "rows_returned": 2047,
+     "server_exec_ms": 67.485
+    },
+    {
+     "total_ms": 77.137,
+     "couchbase_ms": 77.07,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.067,
+     "rows_returned": 2047,
+     "server_exec_ms": 61.726
+    },
+    {
+     "total_ms": 87.987,
+     "couchbase_ms": 87.921,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.066,
+     "rows_returned": 2047,
+     "server_exec_ms": 64.444
+    }
+   ],
+   "errors": [],
+   "rows": 2047,
+   "cold_ms": 85.889,
+   "pemulihan_baseline": null,
+   "min": 77.137,
+   "avg": 88.112,
+   "median": 87.987,
+   "p95": 99.79,
+   "max": 99.79,
+   "avg_tanpa_cold": 88.668,
+   "avg_couchbase_ms": 88.044,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.068,
+   "avg_server_exec_ms": 63.757
+  },
+  {
+   "id": "R-05",
+   "title": "Nasabah tanpa rekening",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    237.61,
+    227.417,
+    218.261,
+    217.895,
+    172.285
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 237.61,
+     "couchbase_ms": 237.545,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.065,
+     "rows_returned": 1000,
+     "server_exec_ms": 219.716
+    },
+    {
+     "total_ms": 227.417,
+     "couchbase_ms": 227.343,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.074,
+     "rows_returned": 1000,
+     "server_exec_ms": 211.513
+    },
+    {
+     "total_ms": 218.261,
+     "couchbase_ms": 218.214,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.047,
+     "rows_returned": 1000,
+     "server_exec_ms": 206.585
+    },
+    {
+     "total_ms": 217.895,
+     "couchbase_ms": 217.845,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.05,
+     "rows_returned": 1000,
+     "server_exec_ms": 204.39
+    },
+    {
+     "total_ms": 172.285,
+     "couchbase_ms": 172.232,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.053,
+     "rows_returned": 1000,
+     "server_exec_ms": 157.572
+    }
+   ],
+   "errors": [],
+   "rows": 1000,
+   "cold_ms": 237.61,
+   "pemulihan_baseline": null,
+   "min": 172.285,
+   "avg": 214.694,
+   "median": 218.261,
+   "p95": 237.61,
+   "max": 237.61,
+   "avg_tanpa_cold": 208.964,
+   "avg_couchbase_ms": 214.636,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.058,
+   "avg_server_exec_ms": 199.955
+  },
+  {
+   "id": "R-06",
+   "title": "Rekap rekening per unit kerja",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    255.044,
+    230.074,
+    241.047,
+    238.279,
+    266.92
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 255.044,
+     "couchbase_ms": 255.002,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.042,
+     "rows_returned": 50,
+     "server_exec_ms": 253.385
+    },
+    {
+     "total_ms": 230.074,
+     "couchbase_ms": 230.043,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.03,
+     "rows_returned": 50,
+     "server_exec_ms": 228.583
+    },
+    {
+     "total_ms": 241.047,
+     "couchbase_ms": 241.01,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.037,
+     "rows_returned": 50,
+     "server_exec_ms": 238.466
+    },
+    {
+     "total_ms": 238.279,
+     "couchbase_ms": 238.238,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.041,
+     "rows_returned": 50,
+     "server_exec_ms": 246.9
+    },
+    {
+     "total_ms": 266.92,
+     "couchbase_ms": 266.877,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.043,
+     "rows_returned": 50,
+     "server_exec_ms": 275.067
+    }
+   ],
+   "errors": [],
+   "rows": 50,
+   "cold_ms": 255.044,
+   "pemulihan_baseline": null,
+   "min": 230.074,
+   "avg": 246.273,
+   "median": 241.047,
+   "p95": 266.92,
+   "max": 266.92,
+   "avg_tanpa_cold": 244.08,
+   "avg_couchbase_ms": 246.234,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.039,
+   "avg_server_exec_ms": 248.48
+  },
+  {
+   "id": "R-07",
+   "title": "Riwayat posting bunga rekening",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    2.185,
+    6.173,
+    2.8,
+    2.566,
+    2.106
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 2.185,
+     "couchbase_ms": 2.172,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.013,
+     "rows_returned": 4,
+     "server_exec_ms": 1.485
+    },
+    {
+     "total_ms": 6.173,
+     "couchbase_ms": 6.156,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.018,
+     "rows_returned": 4,
+     "server_exec_ms": 1.361
+    },
+    {
+     "total_ms": 2.8,
+     "couchbase_ms": 2.78,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.02,
+     "rows_returned": 4,
+     "server_exec_ms": 1.59
+    },
+    {
+     "total_ms": 2.566,
+     "couchbase_ms": 2.551,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.015,
+     "rows_returned": 4,
+     "server_exec_ms": 1.483
+    },
+    {
+     "total_ms": 2.106,
+     "couchbase_ms": 2.094,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.012,
+     "rows_returned": 4,
+     "server_exec_ms": 1.455
+    }
+   ],
+   "errors": [],
+   "rows": 4,
+   "cold_ms": 2.185,
+   "pemulihan_baseline": null,
+   "min": 2.106,
+   "avg": 3.166,
+   "median": 2.566,
+   "p95": 6.173,
+   "max": 6.173,
+   "avg_tanpa_cold": 3.411,
+   "avg_couchbase_ms": 3.151,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.016,
+   "avg_server_exec_ms": 1.475
+  },
+  {
+   "id": "R-08",
+   "title": "Instruksi terjadwal aktif",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    107.595,
+    57.076,
+    67.873,
+    49.072,
+    47.656
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 107.595,
+     "couchbase_ms": 107.511,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.084,
+     "rows_returned": 1274,
+     "server_exec_ms": 84.848
+    },
+    {
+     "total_ms": 57.076,
+     "couchbase_ms": 57.008,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.068,
+     "rows_returned": 1274,
+     "server_exec_ms": 32.196
+    },
+    {
+     "total_ms": 67.873,
+     "couchbase_ms": 67.793,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.081,
+     "rows_returned": 1274,
+     "server_exec_ms": 44.38
+    },
+    {
+     "total_ms": 49.072,
+     "couchbase_ms": 48.993,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.08,
+     "rows_returned": 1274,
+     "server_exec_ms": 34.181
+    },
+    {
+     "total_ms": 47.656,
+     "couchbase_ms": 47.6,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.056,
+     "rows_returned": 1274,
+     "server_exec_ms": 34.239
+    }
+   ],
+   "errors": [],
+   "rows": 1274,
+   "cold_ms": 107.595,
+   "pemulihan_baseline": null,
+   "min": 47.656,
+   "avg": 65.854,
+   "median": 57.076,
+   "p95": 107.595,
+   "max": 107.595,
+   "avg_tanpa_cold": 55.419,
+   "avg_couchbase_ms": 65.781,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.074,
+   "avg_server_exec_ms": 45.969
+  },
+  {
+   "id": "R-09",
+   "title": "Kartu debit kedaluwarsa dalam N hari",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    47.822,
+    56.231,
+    49.814,
+    51.967,
+    53.703
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 47.822,
+     "couchbase_ms": 47.767,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.055,
+     "rows_returned": 829,
+     "server_exec_ms": 35.051
+    },
+    {
+     "total_ms": 56.231,
+     "couchbase_ms": 56.165,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.066,
+     "rows_returned": 829,
+     "server_exec_ms": 40.903
+    },
+    {
+     "total_ms": 49.814,
+     "couchbase_ms": 49.747,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.067,
+     "rows_returned": 829,
+     "server_exec_ms": 36.844
+    },
+    {
+     "total_ms": 51.967,
+     "couchbase_ms": 51.884,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.083,
+     "rows_returned": 829,
+     "server_exec_ms": 36.461
+    },
+    {
+     "total_ms": 53.703,
+     "couchbase_ms": 53.629,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.074,
+     "rows_returned": 829,
+     "server_exec_ms": 39.844
+    }
+   ],
+   "errors": [],
+   "rows": 829,
+   "cold_ms": 47.822,
+   "pemulihan_baseline": null,
+   "min": 47.822,
+   "avg": 51.907,
+   "median": 51.967,
+   "p95": 56.231,
+   "max": 56.231,
+   "avg_tanpa_cold": 52.929,
+   "avg_couchbase_ms": 51.838,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.069,
+   "avg_server_exec_ms": 37.821
+  },
+  {
+   "id": "R-10",
+   "title": "Distribusi rekening per produk",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    246.43,
+    224.678,
+    223.196,
+    215.023,
+    203.322
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 246.43,
+     "couchbase_ms": 246.408,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.022,
+     "rows_returned": 10,
+     "server_exec_ms": 253.852
+    },
+    {
+     "total_ms": 224.678,
+     "couchbase_ms": 224.655,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.023,
+     "rows_returned": 10,
+     "server_exec_ms": 222.55
+    },
+    {
+     "total_ms": 223.196,
+     "couchbase_ms": 223.173,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.022,
+     "rows_returned": 10,
+     "server_exec_ms": 219.798
+    },
+    {
+     "total_ms": 215.023,
+     "couchbase_ms": 215.001,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.022,
+     "rows_returned": 10,
+     "server_exec_ms": 211.916
+    },
+    {
+     "total_ms": 203.322,
+     "couchbase_ms": 203.302,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.02,
+     "rows_returned": 10,
+     "server_exec_ms": 200.626
+    }
+   ],
+   "errors": [],
+   "rows": 10,
+   "cold_ms": 246.43,
+   "pemulihan_baseline": null,
+   "min": 203.322,
+   "avg": 222.53,
+   "median": 223.196,
+   "p95": 246.43,
+   "max": 246.43,
+   "avg_tanpa_cold": 216.555,
+   "avg_couchbase_ms": 222.508,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.022,
+   "avg_server_exec_ms": 221.748
+  },
+  {
+   "id": "W-01",
+   "title": "Daftarkan nasabah baru",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    5.357,
+    4.927,
+    5.191,
+    5.141,
+    4.755
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 5.357,
+     "couchbase_ms": 5.261,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.096,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 4.927,
+     "couchbase_ms": 4.874,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.053,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 5.191,
+     "couchbase_ms": 5.14,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.052,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 5.141,
+     "couchbase_ms": 5.091,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.05,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 4.755,
+     "couchbase_ms": 4.703,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.052,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 5.357,
+   "pemulihan_baseline": true,
+   "min": 4.755,
+   "avg": 5.074,
+   "median": 5.141,
+   "p95": 5.357,
+   "max": 5.357,
+   "avg_tanpa_cold": 5.003,
+   "avg_couchbase_ms": 5.014,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.061,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-02",
+   "title": "Buka rekening tabungan baru",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    5.506,
+    5.163,
+    5.127,
+    14.306,
+    22.265
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 5.506,
+     "couchbase_ms": 5.391,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.115,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 5.163,
+     "couchbase_ms": 5.053,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.11,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 5.127,
+     "couchbase_ms": 5.01,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.117,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 14.306,
+     "couchbase_ms": 14.162,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.144,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 22.265,
+     "couchbase_ms": 22.132,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.133,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 5.506,
+   "pemulihan_baseline": true,
+   "min": 5.127,
+   "avg": 10.473,
+   "median": 5.506,
+   "p95": 22.265,
+   "max": 22.265,
+   "avg_tanpa_cold": 11.715,
+   "avg_couchbase_ms": 10.35,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.124,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-03",
+   "title": "Catat pemegang rekening",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    9.255,
+    7.699,
+    6.296,
+    5.931,
+    5.669
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 9.255,
+     "couchbase_ms": 9.198,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.056,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 7.699,
+     "couchbase_ms": 7.642,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.057,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 6.296,
+     "couchbase_ms": 6.254,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.042,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 5.931,
+     "couchbase_ms": 5.893,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.039,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 5.669,
+     "couchbase_ms": 5.63,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.039,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 9.255,
+   "pemulihan_baseline": true,
+   "min": 5.669,
+   "avg": 6.97,
+   "median": 6.296,
+   "p95": 9.255,
+   "max": 9.255,
+   "avg_tanpa_cold": 6.399,
+   "avg_couchbase_ms": 6.923,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.047,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-04",
+   "title": "Daftarkan kartu debit",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    1.452,
+    1.01,
+    0.908,
+    0.941,
+    0.931
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 1.452,
+     "couchbase_ms": 1.379,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.073,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.01,
+     "couchbase_ms": 0.926,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.084,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 0.908,
+     "couchbase_ms": 0.839,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.069,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 0.941,
+     "couchbase_ms": 0.879,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.062,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 0.931,
+     "couchbase_ms": 0.865,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.066,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 1.452,
+   "pemulihan_baseline": true,
+   "min": 0.908,
+   "avg": 1.048,
+   "median": 0.941,
+   "p95": 1.452,
+   "max": 1.452,
+   "avg_tanpa_cold": 0.948,
+   "avg_couchbase_ms": 0.978,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.071,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-05",
+   "title": "Blokir rekening",
+   "kind": "W",
+   "db": "Keduanya",
+   "runs_ms": [
+    17.238,
+    19.356,
+    24.764,
+    28.413,
+    15.445
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 17.238,
+     "couchbase_ms": 12.946,
+     "cassandra_ms": 4.083,
+     "app_ms": 0.208,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 19.356,
+     "couchbase_ms": 15.14,
+     "cassandra_ms": 3.95,
+     "app_ms": 0.267,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 24.764,
+     "couchbase_ms": 20.22,
+     "cassandra_ms": 4.268,
+     "app_ms": 0.275,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 28.413,
+     "couchbase_ms": 23.991,
+     "cassandra_ms": 4.174,
+     "app_ms": 0.249,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 15.445,
+     "couchbase_ms": 11.862,
+     "cassandra_ms": 3.377,
+     "app_ms": 0.206,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 17.238,
+   "pemulihan_baseline": true,
+   "min": 15.445,
+   "avg": 21.043,
+   "median": 19.356,
+   "p95": 28.413,
+   "max": 28.413,
+   "avg_tanpa_cold": 21.995,
+   "avg_couchbase_ms": 16.832,
+   "avg_cassandra_ms": 3.97,
+   "avg_app_ms": 0.241,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-06",
+   "title": "Blokir sementara kartu debit",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    4.63,
+    3.803,
+    3.654,
+    3.044,
+    3.571
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 4.63,
+     "couchbase_ms": 4.566,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.065,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 3.803,
+     "couchbase_ms": 3.747,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.056,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 3.654,
+     "couchbase_ms": 3.596,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.058,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 3.044,
+     "couchbase_ms": 2.988,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.056,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 3.571,
+     "couchbase_ms": 3.432,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.139,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 4.63,
+   "pemulihan_baseline": true,
+   "min": 3.044,
+   "avg": 3.74,
+   "median": 3.654,
+   "p95": 4.63,
+   "max": 4.63,
+   "avg_tanpa_cold": 3.518,
+   "avg_couchbase_ms": 3.666,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.075,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-07",
+   "title": "Transaksi (setoran / penarikan / transfer)",
+   "kind": "W",
+   "db": "Keduanya",
+   "runs_ms": [
+    13.051,
+    29.338,
+    24.612,
+    22.257,
+    28.508
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 13.051,
+     "couchbase_ms": 9.565,
+     "cassandra_ms": 3.032,
+     "app_ms": 0.454,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 29.338,
+     "couchbase_ms": 24.793,
+     "cassandra_ms": 4.234,
+     "app_ms": 0.312,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 24.612,
+     "couchbase_ms": 18.129,
+     "cassandra_ms": 6.162,
+     "app_ms": 0.32,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 22.257,
+     "couchbase_ms": 16.981,
+     "cassandra_ms": 4.752,
+     "app_ms": 0.524,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 28.508,
+     "couchbase_ms": 21.099,
+     "cassandra_ms": 7.13,
+     "app_ms": 0.278,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 13.051,
+   "pemulihan_baseline": true,
+   "min": 13.051,
+   "avg": 23.553,
+   "median": 24.612,
+   "p95": 29.338,
+   "max": 29.338,
+   "avg_tanpa_cold": 26.179,
+   "avg_couchbase_ms": 18.113,
+   "avg_cassandra_ms": 5.062,
+   "avg_app_ms": 0.378,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-08",
+   "title": "Posting bunga bulanan",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    1.257,
+    1.027,
+    9.24,
+    1.271,
+    1.084
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 1.257,
+     "couchbase_ms": 1.171,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.085,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.027,
+     "couchbase_ms": 0.954,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.073,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 9.24,
+     "couchbase_ms": 9.172,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.068,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.271,
+     "couchbase_ms": 1.176,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.095,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.084,
+     "couchbase_ms": 1.012,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.072,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 1.257,
+   "pemulihan_baseline": true,
+   "min": 1.027,
+   "avg": 2.776,
+   "median": 1.257,
+   "p95": 9.24,
+   "max": 9.24,
+   "avg_tanpa_cold": 3.155,
+   "avg_couchbase_ms": 2.697,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.079,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-09",
+   "title": "Instruksi terjadwal baru (AFT)",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    2.398,
+    1.81,
+    1.897,
+    4.66,
+    1.639
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 2.398,
+     "couchbase_ms": 2.307,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.092,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.81,
+     "couchbase_ms": 1.715,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.095,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.897,
+     "couchbase_ms": 1.824,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.073,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 4.66,
+     "couchbase_ms": 4.582,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.078,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.639,
+     "couchbase_ms": 1.549,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.09,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 2.398,
+   "pemulihan_baseline": true,
+   "min": 1.639,
+   "avg": 2.481,
+   "median": 1.897,
+   "p95": 4.66,
+   "max": 4.66,
+   "avg_tanpa_cold": 2.502,
+   "avg_couchbase_ms": 2.395,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.086,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-10",
+   "title": "Penutupan rekening",
+   "kind": "W",
+   "db": "Keduanya",
+   "runs_ms": [
+    28.634,
+    30.454,
+    42.133,
+    20.849,
+    18.516
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 28.634,
+     "couchbase_ms": 23.497,
+     "cassandra_ms": 4.815,
+     "app_ms": 0.322,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 30.454,
+     "couchbase_ms": 24.617,
+     "cassandra_ms": 5.384,
+     "app_ms": 0.453,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 42.133,
+     "couchbase_ms": 36.214,
+     "cassandra_ms": 5.511,
+     "app_ms": 0.408,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 20.849,
+     "couchbase_ms": 16.738,
+     "cassandra_ms": 3.761,
+     "app_ms": 0.35,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 18.516,
+     "couchbase_ms": 14.619,
+     "cassandra_ms": 3.612,
+     "app_ms": 0.285,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 28.634,
+   "pemulihan_baseline": true,
+   "min": 18.516,
+   "avg": 28.117,
+   "median": 28.634,
+   "p95": 42.133,
+   "max": 42.133,
+   "avg_tanpa_cold": 27.988,
+   "avg_couchbase_ms": 23.137,
+   "avg_cassandra_ms": 4.617,
+   "avg_app_ms": 0.364,
+   "avg_server_exec_ms": null
+  }
+ ]
+}

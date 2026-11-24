@@ -26,14 +26,22 @@ with psycopg.connect(s.pg_dsn) as pg, pg.cursor() as cur:
 
 cl = get_cluster(); opt = QueryOptions(scan_consistency=QueryScanConsistency.REQUEST_PLUS)
 for c, n in pgc.items():
-    got = list(cl.query(f"SELECT COUNT(*) AS n FROM `bri_tabungan`.`operasional`.`{c}`", opt).rows())[0]["n"]
+    # data uji UI/benchmark (rekening 002999*, nasabah NSB99*, kartu 52299*, instruksi INSW99*, posting 002999*) dikecualikan
+    excl = {"nasabah": "(d.id_nasabah LIKE 'NSB99%')", "rekening": "(d.no_rekening LIKE '002999%')", "kartu_debit": "(d.no_kartu LIKE '52299%')",
+            "instruksi_terjadwal": "(d.id_instruksi LIKE 'INSW99%')", "posting_bunga": "(d.no_rekening LIKE '002999%')"}.get(c)
+    where = f" WHERE NOT {excl}" if excl else ""
+    got = list(cl.query(f"SELECT COUNT(*) AS n FROM `bri_tabungan`.`operasional`.`{c}` d{where}", opt).rows())[0]["n"]
     check(f"Couchbase {c}", n, got)
-tot_sen = list(cl.query("SELECT SUM(r.saldo_efektif_sen) AS t FROM `bri_tabungan`.`operasional`.`rekening` r", opt).rows())[0]["t"]
+tot_sen = list(cl.query("SELECT SUM(r.saldo_efektif_sen) AS t FROM `bri_tabungan`.`operasional`.`rekening` r WHERE r.no_rekening NOT LIKE '002999%'", opt).rows())[0]["t"]
 
 ses = get_session()
 # rekonsiliasi saldo: total saldo Couchbase = total seed (PG) + net event API di ledger (setoran/transfer masuk - penarikan/transfer keluar)
 net = 0
-for r in ses.execute("SELECT jenis_event, nominal FROM ledger_event_by_id"):
+n_api_uji = 0
+for r in ses.execute("SELECT jenis_event, nominal, no_rekening FROM ledger_event_by_id"):
+    if r.no_rekening.startswith("002999"):          # event data uji tidak dihitung
+        n_api_uji += 1
+        continue
     sign = 1 if r.jenis_event in ("SETORAN", "TRANSFER_MASUK") else (-1 if r.jenis_event in ("PENARIKAN", "TRANSFER_KELUAR") else 0)
     net += sign * int(r.nominal * 100)
 check("Rekonsiliasi total saldo Couchbase = seed PG + net event ledger (sen)", int(pg_saldo * 100) + net, int(tot_sen))
@@ -42,7 +50,7 @@ total = 0
 for kanal in ["KNL01", "KNL02", "KNL03", "KNL04", "KNL05", "KNL06", "KNL07"]:
     for b in [f"2025{m:02d}" for m in (11, 12)] + [f"2026{m:02d}" for m in range(1, 12)]:
         total += ses.execute("SELECT COUNT(*) FROM ledger_by_kanal_bulan WHERE id_kanal=%s AND bulan=%s", [kanal, b]).one()[0]
-n_api = ses.execute("SELECT COUNT(*) FROM ledger_event_by_id").one()[0]      # event yang dibuat API (bukan seed)
+n_api = ses.execute("SELECT COUNT(*) FROM ledger_event_by_id").one()[0]      # event yang dibuat API (bukan seed), termasuk data uji
 check("Cassandra ledger (ledger_by_kanal_bulan, event SEED saja)", pg_tx, total - n_api)
 print(f"       (event dari API setelah seed: {n_api})")
 

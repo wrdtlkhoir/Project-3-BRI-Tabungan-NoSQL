@@ -47,6 +47,17 @@ def run(name, fn, total, workers):
     return r
 
 
+def purge_synthetic(led, prefix):
+    """Hapus event sintetis stress test (hanya ditulis ke Cassandra, tidak mengubah saldo Couchbase)."""
+    s = led.s
+    for r in list(s.execute("SELECT event_id, no_rekening, bulan, waktu_event FROM ledger_event_by_id WHERE sumber='STRESS' ALLOW FILTERING")):
+        if not r.event_id.startswith(prefix.split("-")[0] + "-"):
+            continue
+        s.execute("DELETE FROM ledger_by_rekening WHERE no_rekening=%s AND bulan=%s AND waktu_event=%s AND event_id=%s", [r.no_rekening, r.bulan, r.waktu_event, r.event_id])
+        s.execute("DELETE FROM ledger_by_kanal_bulan WHERE id_kanal=%s AND bulan=%s AND waktu_event=%s AND event_id=%s", ["KNL01", r.bulan, r.waktu_event, r.event_id])
+        s.execute("DELETE FROM ledger_event_by_id WHERE event_id=%s", [r.event_id])
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--n", type=int, default=400); ap.add_argument("--workers", type=int, default=8)
     a = ap.parse_args()
@@ -89,6 +100,7 @@ def main():
     print("KONSISTENSI:", r["konsistensi"])
     res.append(r)
 
+    purge_synthetic(led, f"STRESS-{run_id}-")            # event sintetis (tanpa perubahan saldo) dibersihkan agar ledger tetap konsisten
     out = pathlib.Path(__file__).resolve().parents[1] / "docs" / "stress_result.json"
     json.dump({"waktu": datetime.now(timezone.utc).isoformat(), "hasil": res}, open(out, "w"), indent=1)
     print("tersimpan", out)

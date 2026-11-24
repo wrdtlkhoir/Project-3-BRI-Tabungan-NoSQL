@@ -1,0 +1,286 @@
+{
+ "id": "223c01ac441647e2acfb6fe9f02b5b52",
+ "runs": 5,
+ "warmup": 1,
+ "lingkungan": {
+  "waktu": "2026-11-24T14:03:30.321941+00:00",
+  "python": "3.13.15",
+  "os": "Windows-11-10.0.26200-SP0",
+  "commit": "1336176",
+  "cassandra_version": "5.0.9",
+  "couchbase_version": "7.6.1-N1QL"
+ },
+ "hasil": [
+  {
+   "id": "R-07",
+   "title": "Riwayat posting bunga rekening",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    2.418,
+    2.194,
+    2.322,
+    2.378,
+    2.151
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 2.418,
+     "couchbase_ms": 2.4,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.018,
+     "rows_returned": 4,
+     "server_exec_ms": 1.551
+    },
+    {
+     "total_ms": 2.194,
+     "couchbase_ms": 2.179,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.015,
+     "rows_returned": 4,
+     "server_exec_ms": 1.408
+    },
+    {
+     "total_ms": 2.322,
+     "couchbase_ms": 2.309,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.014,
+     "rows_returned": 4,
+     "server_exec_ms": 1.516
+    },
+    {
+     "total_ms": 2.378,
+     "couchbase_ms": 2.362,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.015,
+     "rows_returned": 4,
+     "server_exec_ms": 1.555
+    },
+    {
+     "total_ms": 2.151,
+     "couchbase_ms": 2.137,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.014,
+     "rows_returned": 4,
+     "server_exec_ms": 1.361
+    }
+   ],
+   "errors": [],
+   "rows": 4,
+   "cold_ms": 2.418,
+   "pemulihan_baseline": null,
+   "min": 2.151,
+   "avg": 2.293,
+   "median": 2.322,
+   "p95": 2.418,
+   "max": 2.418,
+   "avg_tanpa_cold": 2.261,
+   "avg_couchbase_ms": 2.277,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.015,
+   "avg_server_exec_ms": 1.478
+  },
+  {
+   "id": "R-10",
+   "title": "Distribusi rekening per produk",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    234.387,
+    203.413,
+    202.616,
+    198.885,
+    203.635
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 234.387,
+     "couchbase_ms": 234.369,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.018,
+     "rows_returned": 10,
+     "server_exec_ms": 230.701
+    },
+    {
+     "total_ms": 203.413,
+     "couchbase_ms": 203.396,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.017,
+     "rows_returned": 10,
+     "server_exec_ms": 199.953
+    },
+    {
+     "total_ms": 202.616,
+     "couchbase_ms": 202.6,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.017,
+     "rows_returned": 10,
+     "server_exec_ms": 199.136
+    },
+    {
+     "total_ms": 198.885,
+     "couchbase_ms": 198.867,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.018,
+     "rows_returned": 10,
+     "server_exec_ms": 195.555
+    },
+    {
+     "total_ms": 203.635,
+     "couchbase_ms": 203.617,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.018,
+     "rows_returned": 10,
+     "server_exec_ms": 200.053
+    }
+   ],
+   "errors": [],
+   "rows": 10,
+   "cold_ms": 234.387,
+   "pemulihan_baseline": null,
+   "min": 198.885,
+   "avg": 208.587,
+   "median": 203.413,
+   "p95": 234.387,
+   "max": 234.387,
+   "avg_tanpa_cold": 202.137,
+   "avg_couchbase_ms": 208.57,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.018,
+   "avg_server_exec_ms": 205.08
+  },
+  {
+   "id": "W-08",
+   "title": "Posting bunga bulanan",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    1.389,
+    1.153,
+    1.085,
+    1.074,
+    1.012
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 1.389,
+     "couchbase_ms": 1.28,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.11,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.153,
+     "couchbase_ms": 1.07,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.083,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.085,
+     "couchbase_ms": 1.012,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.073,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.074,
+     "couchbase_ms": 1.01,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.064,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 1.012,
+     "couchbase_ms": 0.958,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.054,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 1.389,
+   "pemulihan_baseline": true,
+   "min": 1.012,
+   "avg": 1.143,
+   "median": 1.085,
+   "p95": 1.389,
+   "max": 1.389,
+   "avg_tanpa_cold": 1.081,
+   "avg_couchbase_ms": 1.066,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.077,
+   "avg_server_exec_ms": null
+  },
+  {
+   "id": "W-07",
+   "title": "Transaksi (setoran / penarikan / transfer)",
+   "kind": "W",
+   "db": "Keduanya",
+   "runs_ms": [
+    14.527,
+    13.467,
+    12.105,
+    12.554,
+    12.481
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 14.527,
+     "couchbase_ms": 11.213,
+     "cassandra_ms": 3.079,
+     "app_ms": 0.235,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 13.467,
+     "couchbase_ms": 10.316,
+     "cassandra_ms": 2.933,
+     "app_ms": 0.218,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 12.105,
+     "couchbase_ms": 9.323,
+     "cassandra_ms": 2.591,
+     "app_ms": 0.191,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 12.554,
+     "couchbase_ms": 9.591,
+     "cassandra_ms": 2.757,
+     "app_ms": 0.206,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    },
+    {
+     "total_ms": 12.481,
+     "couchbase_ms": 9.467,
+     "cassandra_ms": 2.823,
+     "app_ms": 0.191,
+     "rows_returned": 1,
+     "ledger_visible_lag_ms": 0
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 14.527,
+   "pemulihan_baseline": true,
+   "min": 12.105,
+   "avg": 13.027,
+   "median": 12.554,
+   "p95": 14.527,
+   "max": 14.527,
+   "avg_tanpa_cold": 12.652,
+   "avg_couchbase_ms": 9.982,
+   "avg_cassandra_ms": 2.837,
+   "avg_app_ms": 0.208,
+   "avg_server_exec_ms": null
+  }
+ ]
+}

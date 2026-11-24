@@ -1,0 +1,114 @@
+{
+ "id": "a72b7b9a57394b019ba47737ab294df9",
+ "runs": 3,
+ "warmup": 1,
+ "lingkungan": {
+  "waktu": "2026-11-24T14:03:23.443320+00:00",
+  "python": "3.13.15",
+  "os": "Windows-11-10.0.26200-SP0",
+  "commit": "1336176",
+  "cassandra_version": "5.0.9",
+  "couchbase_version": "7.6.1-N1QL"
+ },
+ "hasil": [
+  {
+   "id": "R-07",
+   "title": "Riwayat posting bunga rekening",
+   "kind": "R",
+   "db": "Couchbase",
+   "runs_ms": [
+    6.534,
+    5.212,
+    5.595
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 6.534,
+     "couchbase_ms": 6.5,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.034,
+     "rows_returned": 4,
+     "server_exec_ms": 3.281
+    },
+    {
+     "total_ms": 5.212,
+     "couchbase_ms": 5.179,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.033,
+     "rows_returned": 4,
+     "server_exec_ms": 3.229
+    },
+    {
+     "total_ms": 5.595,
+     "couchbase_ms": 5.562,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.033,
+     "rows_returned": 4,
+     "server_exec_ms": 3.479
+    }
+   ],
+   "errors": [],
+   "rows": 4,
+   "cold_ms": 6.534,
+   "pemulihan_baseline": null,
+   "min": 5.212,
+   "avg": 5.78,
+   "median": 5.595,
+   "p95": 6.534,
+   "max": 6.534,
+   "avg_tanpa_cold": 5.403,
+   "avg_couchbase_ms": 5.747,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.033,
+   "avg_server_exec_ms": 3.33
+  },
+  {
+   "id": "W-08",
+   "title": "Posting bunga bulanan",
+   "kind": "W",
+   "db": "Couchbase",
+   "runs_ms": [
+    2.179,
+    2.442,
+    2.371
+   ],
+   "runs_detail": [
+    {
+     "total_ms": 2.179,
+     "couchbase_ms": 2.022,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.158,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 2.442,
+     "couchbase_ms": 2.278,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.164,
+     "rows_returned": 1
+    },
+    {
+     "total_ms": 2.371,
+     "couchbase_ms": 2.192,
+     "cassandra_ms": 0.0,
+     "app_ms": 0.179,
+     "rows_returned": 1
+    }
+   ],
+   "errors": [],
+   "rows": 1,
+   "cold_ms": 2.179,
+   "pemulihan_baseline": true,
+   "min": 2.179,
+   "avg": 2.331,
+   "median": 2.371,
+   "p95": 2.442,
+   "max": 2.442,
+   "avg_tanpa_cold": 2.407,
+   "avg_couchbase_ms": 2.164,
+   "avg_cassandra_ms": 0.0,
+   "avg_app_ms": 0.167,
+   "avg_server_exec_ms": null
+  }
+ ]
+}
