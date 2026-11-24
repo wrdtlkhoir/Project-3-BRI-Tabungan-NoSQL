@@ -1,0 +1,9 @@
+# lingkungan lokal & rahasia
+.venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# log hasil jalan
+*.log

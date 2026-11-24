@@ -1,0 +1,7 @@
+# Skrip shell harus LF (CRLF membuat container Linux error "set: illegal option -")
+*.sh text eol=lf
+*.n1ql text eol=lf
+*.cql text eol=lf
+*.dump binary
+*.png binary
+*.pptx binary
