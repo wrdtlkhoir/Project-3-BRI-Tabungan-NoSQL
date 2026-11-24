@@ -14,6 +14,7 @@ from app.config import get_settings
 from app.schemas.transaksi import PenarikanRequest, SetoranRequest, TransaksiResponse, TransferRequest
 from app.services.rekening_service import RekeningService, _months
 from app.services.transaksi_service import BusinessError, TransaksiService
+from app import ui_api
 
 state: dict = {}
 
@@ -34,6 +35,7 @@ async def lifespan(app: FastAPI):
     # koneksi SDK bersifat blocking -> jalankan di thread agar event loop uvicorn tidak tertahan
     state["trx"] = await asyncio.to_thread(TransaksiService)
     state["rek"] = RekeningService(state["trx"].cb, state["trx"].ledger)
+    await asyncio.to_thread(ui_api.bind, state["trx"], state["rek"])      # UI + pengukuran waktu (tidak mengubah logika lama)
     stop = threading.Event()
     t = threading.Thread(target=_relay_loop, args=(stop,), daemon=True)
     t.start()
@@ -42,6 +44,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="BRI Tabungan NoSQL — Couchbase + Cassandra Event Ledger", version="1.0", lifespan=lifespan)
+
+
+app.include_router(ui_api.router)
+ui_api.mount_ui(app)
 
 
 def _guard(fn, *a, **kw):
