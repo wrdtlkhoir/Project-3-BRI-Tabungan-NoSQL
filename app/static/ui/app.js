@@ -35,8 +35,7 @@ function table(rows, name) {
     data.forEach(r => tb.append(el('tr', {}, ks.map(k => el('td', { title: String(typeof r[k] === 'object' ? JSON.stringify(r[k]) : (r[k] ?? '')) }, fmt(k, r[k]))))));
   };
   render();
-  const dl = el('button', { class: 'sec', onclick: () => { const a = el('a', { href: URL.createObjectURL(new Blob([csvOf(rows)], { type: 'text/csv' })), download: (name || 'hasil') + '.csv' }); a.click(); } }, 'Ekspor CSV (yang ditampilkan)');
-  wrap.append(dl, el('div', { class: 'tbl' }, tb)); return wrap;
+  wrap.append(el('div', { class: 'tbl' }, tb)); return wrap;
 }
 function timingPanel(tm, avg) {
   const items = [['Total', tm.total_ms], ['Couchbase', tm.couchbase_ms], ['Cassandra', tm.cassandra_ms], ['Aplikasi', tm.app_ms]];
@@ -59,7 +58,7 @@ async function loadStatus() {
       el('div', { class: 'card' }, el('h3', {}, 'Data seed (Couchbase)'), el('div', {}, `Nasabah: ${n(j.nasabah?.seed)}`), el('div', {}, `Rekening: ${n(j.rekening?.seed)}`), el('div', {}, `Kartu debit: ${n(j.kartu_debit?.seed)}`), el('div', { class: 'mut' }, `Data uji: ${n(j.rekening?.uji)} rekening, ${n(j.nasabah?.uji)} nasabah, ${n(j.kartu_debit?.uji)} kartu`)),
       el('div', { class: 'card' }, el('h3', {}, 'Event ledger (Cassandra)'), el('div', {}, `Total event: ${n(j.ledger_events)}`), el('div', { class: 'mut' }, `Dibuat via API: ${n(j.ledger_api)} · Python ${s.python}`)),
       el('div', { class: 'card' }, el('h3', {}, 'Outbox (sinkron ledger)'), el('div', {}, Object.entries(j.outbox || {}).map(([k, v]) => `${k}: ${n(v)}`).join(' · ') || 'kosong'), el('div', { class: s.simulasi_cassandra_mati ? 'bad' : 'ok' }, s.simulasi_cassandra_mati ? 'Simulasi Cassandra MATI aktif' : 'Relay normal'))));
-    box.append(el('p', {}, el('button', { class: 'sec', onclick: async () => { if (confirm('Kembalikan data uji ke baseline? (menghapus data uji + event ledger-nya)')) { await post('/api/test-data/reset', {}); alert('Data uji dipulihkan.'); loadStatus(); } } }, 'Reset data uji'), ' ', el('span', { class: 'mut' }, 'Data uji: rekening 002999…, nasabah NSB99…, kartu 52299…')));
+    box.append(el('p', {}, el('button', { class: 'sec', onclick: async () => { if (confirm('Kembalikan data uji ke kondisi awal?')) { await post('/api/test-data/reset', {}); alert('Data uji sudah dikembalikan.'); loadStatus(); } } }, 'Reset data uji'), ' ', el('span', { class: 'mut' }, 'Data uji: rekening 002999…, nasabah NSB99…, kartu 52299…')));
   } catch (e) { box.innerHTML = ''; box.append(errBox(e)); }
 }
 
@@ -72,21 +71,20 @@ function card(q) {
   const out = el('div'); const btn = el('button', { class: 'act' + (q.kind === 'W' ? ' w' : '') }, 'Jalankan');
   const params = () => Object.fromEntries(Object.entries(inputs).map(([k, i]) => [k, i.value]));
   btn.onclick = async () => {
-    if (q.kind === 'W' && !confirm(`${q.id} MENGUBAH data (saran: data uji). Lanjutkan?\n\nSaya paham ini mengubah data uji.`)) return;
-    btn.disabled = true; out.innerHTML = 'Menjalankan…';
+    if (q.kind === 'W' && !confirm(`Jalankan ${q.id}? Query ini mengubah data uji.`)) return;
+    btn.disabled = true; out.innerHTML = 'Menjalankan…'; $('#q-' + q.id).style.gridColumn = '1 / -1';
     try {
       const r = await post(`/api/queries/${q.id}/run`, { params: params(), confirm: q.kind === 'W' }); const d = r.data; out.innerHTML = '';
       out.append(timingPanel(r.meta.timing, BENCH_AVG[q.id]));
       if (d.hasil?.message) out.append(el('div', { class: 'ok' }, '✔ ' + d.hasil.message));
       if (d.hasil?.saldo_sebelum) out.append(el('div', {}, 'Saldo sebelum → sesudah: ', Object.keys(d.hasil.saldo_sebelum).map(k => el('div', {}, `${k}: ${rp(d.hasil.saldo_sebelum[k])} → ${rp(d.hasil.saldo_sesudah[k])}`))));
       out.append(el('div', { class: 'mut' }, `Menampilkan ${d.baris.length} dari ${d.total_baris.toLocaleString('id-ID')} baris${d.dipotong ? ' (dipotong 100)' : ''}`), table(d.baris, q.id));
-      if (q.kind === 'R' && d.total_baris === 0) out.append(el('div', { class: 'warn' }, 'Hasil kosong — periksa parameter atau data seed.'));
+      if (q.kind === 'R' && d.total_baris === 0) out.append(el('div', { class: 'warn' }, 'Tidak ada hasil untuk parameter ini.'));
     } catch (e) { out.innerHTML = ''; out.append(errBox(e)); } btn.disabled = false;
   };
-  const cp = el('button', { class: 'sec', onclick: () => navigator.clipboard.writeText(q.statement) }, 'Salin');
-  return el('div', { class: 'card', id: 'q-' + q.id }, el('div', {}, el('span', { class: 'badge b-' + q.kind }, q.kind === 'R' ? 'READ' : 'WRITE'), el('span', { class: 'badge b-' + q.db }, q.db)), el('h3', {}, `${q.id} · ${q.title}`), el('div', { class: 'mut' }, q.desc), q.note ? el('div', { class: 'warn mut' }, 'Catatan: ' + q.note) : '', form, el('div', { class: 'row' }, btn, cp), el('details', {}, el('summary', {}, 'Statement (SQL++ / CQL)'), el('pre', {}, q.statement)), out);
+  return el('div', { class: 'card', id: 'q-' + q.id }, el('div', {}, el('span', { class: 'badge b-' + q.kind }, q.kind === 'R' ? 'READ' : 'WRITE'), el('span', { class: 'badge b-' + q.db }, q.db)), el('h3', {}, `${q.id} · ${q.title}`), el('div', { class: 'mut' }, q.desc), q.note ? el('div', { class: 'warn mut' }, 'Catatan: ' + q.note) : '', form, el('div', { class: 'row' }, btn), el('details', {}, el('summary', {}, 'Statement (SQL++ / CQL)'), el('pre', {}, q.statement)), out);
 }
-async function initExplorer() { QUERIES = await api('/api/queries'); await loadBenchAvg(); const box = $('#tab-explorer'); box.append(el('p', { class: 'mut' }, 'Query READ aman dijalankan. Query WRITE hanya menyentuh data uji (rekening 002999…, NSB99…) dan meminta konfirmasi.'), el('h2', {}, 'Query Read (R-01 … R-10)'), el('div', { class: 'grid' }, QUERIES.filter(q => q.kind === 'R').map(card)), el('h2', {}, 'Query Write (W-01 … W-10)'), el('div', { class: 'grid' }, QUERIES.filter(q => q.kind === 'W').map(card))); }
+async function initExplorer() { QUERIES = await api('/api/queries'); await loadBenchAvg(); const box = $('#tab-explorer'); box.append(el('p', { class: 'mut' }, 'READ hanya membaca data. WRITE hanya mengubah data uji (rekening 002999…, nasabah NSB99…).'), el('h2', {}, 'Query Read (R-01 … R-10)'), el('div', { class: 'grid' }, QUERIES.filter(q => q.kind === 'R').map(card)), el('h2', {}, 'Query Write (W-01 … W-10)'), el('div', { class: 'grid' }, QUERIES.filter(q => q.kind === 'W').map(card))); }
 
 // ---------- Benchmark
 function chart(rows) {
@@ -99,7 +97,7 @@ function benchTable(d) {
   const err = rows.filter(r => r.errors?.length); return el('div', {}, el('div', { class: 'tbl' }, t), err.length ? el('div', { class: 'err' }, err.map(r => el('div', {}, `${r.id}: ${r.errors[0]}`))) : '', el('h3', {}, 'Perbandingan rata-rata (ms) per query'), chart(rows));
 }
 async function loadHistory() { const box = $('#bench-history'); if (!box) return; try { const h = await api('/api/benchmark/results'); box.innerHTML = ''; if (!h.length) box.append(el('div', { class: 'mut' }, 'Belum ada riwayat.')); h.forEach(x => box.append(el('div', { class: 'row' }, el('span', {}, `${tgl(x.waktu)} · ${x.jumlah_query} query · ${x.runs} run`), el('button', { class: 'sec', onclick: async () => showResult(x.file) }, 'Lihat'), ...['csv', 'json', 'md'].map(f => el('a', { href: `/api/benchmark/results/${x.file}?format=${f}`, target: '_blank', class: 'sec', style: 'color:#93c5fd;text-decoration:none;padding:6px 8px' }, f.toUpperCase()))))); } catch { } }
-async function showResult(file) { const d = await api('/api/benchmark/results/' + file); const o = $('#bench-out'); o.innerHTML = ''; o.append(el('div', { class: 'mut' }, `Lingkungan: ${tgl(d.lingkungan.waktu)} · Python ${d.lingkungan.python} · Couchbase ${d.lingkungan.couchbase_version ?? '-'} · Cassandra ${d.lingkungan.cassandra_version ?? '-'} · commit ${d.lingkungan.commit ?? '-'}`), benchTable(d), el('h3', {}, 'Tabel Markdown (siap tempel ke laporan)'), el('pre', {}, await (await fetch(`/api/benchmark/results/${file}?format=md`)).text())); }
+async function showResult(file) { const d = await api('/api/benchmark/results/' + file); const o = $('#bench-out'); o.innerHTML = ''; o.append(el('div', { class: 'mut' }, `Lingkungan: ${tgl(d.lingkungan.waktu)} · Python ${d.lingkungan.python} · Couchbase ${d.lingkungan.couchbase_version ?? '-'} · Cassandra ${d.lingkungan.cassandra_version ?? '-'} · commit ${d.lingkungan.commit ?? '-'}`), benchTable(d)); }
 function initBenchmark() {
   const box = $('#tab-benchmark'); const sel = {}; const checks = el('div', { class: 'row' });
   ['R-01', 'R-02', 'R-03', 'R-04', 'R-05', 'R-06', 'R-07', 'R-08', 'R-09', 'R-10', 'W-01', 'W-02', 'W-03', 'W-04', 'W-05', 'W-06', 'W-07', 'W-08', 'W-09', 'W-10'].forEach(id => { const c = el('input', { type: 'checkbox', style: 'min-width:0' }); c.checked = true; sel[id] = c; checks.append(el('label', { style: 'flex-direction:row;align-items:center;gap:4px' }, c, id)); });
@@ -108,15 +106,15 @@ function initBenchmark() {
   const prog = el('div', { class: 'progress' }, el('div')); const info = el('div', { class: 'mut' }); const out = el('div', { id: 'bench-out' }); const go = el('button', { class: 'act' }, 'Mulai benchmark');
   go.onclick = async () => {
     const ids = Object.entries(sel).filter(([, c]) => c.checked).map(([i]) => i);
-    if (ids.some(i => i.startsWith('W')) && !conf.checked) { alert('Centang konfirmasi: "Saya paham ini mengubah data uji" untuk menyertakan query WRITE.'); return; }
-    go.disabled = true; out.innerHTML = ''; prog.firstChild.style.width = '0'; info.textContent = 'Memulai…';
+    if (ids.some(i => i.startsWith('W')) && !conf.checked) { alert('Centang "Sertakan query WRITE" untuk menjalankan W-01 sampai W-10.'); return; }
+    go.disabled = true; out.innerHTML = ''; prog.firstChild.style.width = '0'; info.textContent = 'Memulai';
     try { const { job_id } = await post('/api/benchmark', { ids, runs: +runs.value, warmup: +warm.value, confirm_write: conf.checked });
       const t = setInterval(async () => { const j = await api('/api/benchmark/jobs/' + job_id); prog.firstChild.style.width = j.progress + '%'; info.textContent = `${j.status} · ${j.progress}% · ${j.current || ''}`;
         if (j.status !== 'berjalan') { clearInterval(t); go.disabled = false; if (j.status === 'selesai') { await showResult(j.file); loadHistory(); loadBenchAvg(); } else out.append(errBox({ message: j.error || 'gagal' })); } }, 1000);
     } catch (e) { go.disabled = false; info.textContent = ''; out.append(errBox(e)); } };
-  box.append(el('div', { class: 'card' }, el('h3', {}, 'Benchmark execution time'), el('div', { class: 'mut' }, 'Setiap query dijalankan N run + warm-up (tidak dihitung). Query WRITE dipulihkan ke baseline setelah tiap run (pemulihan tidak diukur).'),
+  box.append(el('div', { class: 'card' }, el('h3', {}, 'Benchmark execution time'), el('div', { class: 'mut' }, 'Tiap query dijalankan beberapa kali setelah satu warm-up. Query WRITE dikembalikan ke kondisi awal setelah setiap run (waktu pemulihan tidak dihitung).'),
     el('div', { class: 'row' }, el('button', { class: 'sec', onclick: () => set(i => i.startsWith('R')) }, 'Semua R'), el('button', { class: 'sec', onclick: () => set(i => i.startsWith('W')) }, 'Semua W'), el('button', { class: 'sec', onclick: () => set(() => true) }, 'Semua'), el('button', { class: 'sec', onclick: () => set(() => false) }, 'Kosongkan')), checks,
-    el('div', { class: 'row' }, el('label', {}, 'Runs', runs), el('label', {}, 'Warm-up', warm), el('label', { style: 'flex-direction:row;align-items:center;gap:6px;color:#fbbf24' }, conf, 'Saya paham ini mengubah data uji (WRITE)'), go), prog, info), out,
+    el('div', { class: 'row' }, el('label', {}, 'Runs', runs), el('label', {}, 'Warm-up', warm), el('label', { style: 'flex-direction:row;align-items:center;gap:6px;color:#fbbf24' }, conf, 'Sertakan query WRITE'), go), prog, info), out,
     el('h3', {}, 'Riwayat benchmark'), el('div', { id: 'bench-history' }));
 }
 
@@ -133,7 +131,7 @@ function initTransaksi() {
       out.append(timingPanel(r.meta.timing), el('div', { class: res.duplicate ? 'warn' : 'ok' }, res.duplicate ? `⚠ DUPLIKAT terdeteksi (key sama) — saldo tidak berubah. event ${res.event_id}` : `✔ ${d.hasil.message} · event ${res.event_id}`), el('div', {}, `ledger: ${res.ledger_status} · saldo setelah: ${rp(res.saldo_setelah)}`), el('div', { class: 'mut' }, `Saldo sebelum → sesudah: ` + Object.keys(d.hasil.saldo_sebelum).map(k => `${k}: ${rp(d.hasil.saldo_sebelum[k])} → ${rp(d.hasil.saldo_sesudah[k])}`).join(' | ')));
       riwayat(); } catch (e) { out.innerHTML = ''; out.append(errBox(e)); } }
   async function riwayat() { try { const r = await post('/api/queries/R-01/run', { params: { no_rekening: f.no_rekening.value, tanggal_awal: '2025-11-01', tanggal_akhir: '2026-12-31' }, confirm: false }); hist.innerHTML = ''; hist.append(el('h3', {}, 'Riwayat rekening (R-01, Cassandra)'), timingPanel(r.meta.timing), table(r.data.baris.slice(0, 30).map(({ no_rekening, bulan, ...x }) => x), 'riwayat')); } catch (e) { hist.innerHTML = ''; hist.append(errBox(e)); } }
-  box.append(el('div', { class: 'card' }, el('h3', {}, 'Setoran / Penarikan / Transfer (W-07)'), el('div', { class: 'mut' }, 'Memakai rekening uji. Kosongkan key untuk transaksi baru; "Kirim ulang" memakai key yang sama untuk mendemokan idempotensi.'), form,
+  box.append(el('div', { class: 'card' }, el('h3', {}, 'Setoran / Penarikan / Transfer (W-07)'), el('div', { class: 'mut' }, 'Rekening uji. "Kirim ulang" memakai idempotency key yang sama, sehingga transaksi tidak tercatat dua kali.'), form,
     el('div', { class: 'row' }, el('button', { class: 'act w', onclick: () => kirim(false) }, 'Kirim'), el('button', { class: 'sec', onclick: () => { if (!lastKey) { alert('Kirim transaksi dulu.'); return; } f.idempotency_key.value = lastKey; kirim(true); } }, 'Kirim ulang dengan key yang sama'), el('button', { class: 'sec', onclick: riwayat }, 'Muat riwayat')), out), hist);
 }
 
