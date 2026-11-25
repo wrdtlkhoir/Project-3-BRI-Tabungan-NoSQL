@@ -102,16 +102,17 @@ def purge_ledger_events(event_ids: list[str]):
     """Hapus jejak event uji di Cassandra (3 tabel) dan outbox Couchbase. Hanya untuk data uji."""
     s = ledger().s
     for eid in event_ids:
-        r = s.execute("SELECT no_rekening, bulan, waktu_event FROM ledger_event_by_id WHERE event_id=%s", [eid]).one()
+        r = s.execute("SELECT no_rekening, waktu_transaksi, jenis_transaksi, status_transaksi FROM transaksi_by_id WHERE id_transaksi=%s", [eid]).one()
         if r:
-            row = s.execute("SELECT id_kanal FROM ledger_by_rekening WHERE no_rekening=%s AND bulan=%s AND waktu_event=%s AND event_id=%s",
-                            [r.no_rekening, r.bulan, r.waktu_event, eid]).one()
+            row = s.execute("SELECT id_kanal FROM transaksi_by_rekening WHERE no_rekening=%s AND waktu_transaksi=%s AND id_transaksi=%s",
+                            [r.no_rekening, r.waktu_transaksi, eid]).one()
             kanal = (row.id_kanal if row else None) or "NA"
-            s.execute("DELETE FROM ledger_by_rekening WHERE no_rekening=%s AND bulan=%s AND waktu_event=%s AND event_id=%s",
-                      [r.no_rekening, r.bulan, r.waktu_event, eid])
-            s.execute("DELETE FROM ledger_by_kanal_bulan WHERE id_kanal=%s AND bulan=%s AND waktu_event=%s AND event_id=%s",
-                      [kanal, r.bulan, r.waktu_event, eid])
-            s.execute("DELETE FROM ledger_event_by_id WHERE event_id=%s", [eid])
+            periode = r.waktu_transaksi.strftime("%Y%m")
+            s.execute("DELETE FROM transaksi_by_rekening WHERE no_rekening=%s AND waktu_transaksi=%s AND id_transaksi=%s",
+                      [r.no_rekening, r.waktu_transaksi, eid])
+            s.execute("DELETE FROM transaksi_by_kanal_periode WHERE id_kanal=%s AND periode=%s AND status_transaksi=%s AND jenis_transaksi=%s AND waktu_transaksi=%s AND id_transaksi=%s",
+                      [kanal, periode, r.status_transaksi, r.jenis_transaksi, r.waktu_transaksi, eid])
+            s.execute("DELETE FROM transaksi_by_id WHERE id_transaksi=%s", [eid])
         try:
             cb().outbox.remove(f"outbox::{eid}")
         except DocumentNotFoundException:
@@ -194,7 +195,7 @@ def r01(p):
 reg(Q("R-01", "R", "Riwayat transaksi rekening", "Riwayat transaksi satu rekening dalam periode (terbaru dulu).", "Cassandra",
       [Param("no_rekening", "No. rekening", "text", "002101000000001"), Param("tanggal_awal", "Tanggal awal", "date", "2025-11-01"),
        Param("tanggal_akhir", "Tanggal akhir", "date", "2026-12-31")],
-      "-- dijalankan per partisi bulan (no_rekening, bulan)\nSELECT * FROM bri_ledger.ledger_by_rekening\n WHERE no_rekening = ? AND bulan = ?\n   AND waktu_event >= ? AND waktu_event < ?\n LIMIT 5000;",
+      "SELECT id_transaksi, waktu_transaksi, jenis_transaksi, arah, nominal, mata_uang,\n       status_transaksi, saldo_setelah, nama_kanal, no_kartu\n  FROM bri_tabungan.transaksi_by_rekening\n WHERE no_rekening = ?\n   AND waktu_transaksi >= ? AND waktu_transaksi < ?\n ORDER BY waktu_transaksi DESC;",
       r01))
 
 
@@ -245,9 +246,9 @@ def r03(p):
 # R-03 diselipkan agar urutan katalog R-01, R-02, R-03, ...
 _tmp = CAT.pop("R-02")
 reg(_tmp)
-reg(Q("R-03", "R", "Laporan transaksi bulanan per kanal", "Jumlah dan nominal transaksi BERHASIL per bulan dan jenis pada satu kanal (agregasi di aplikasi dari ledger).",
+reg(Q("R-03", "R", "Laporan transaksi bulanan per kanal", "Jumlah dan nominal transaksi BERHASIL per bulan dan jenis pada satu kanal (GROUP BY dikerjakan server dari tabel transaksi_by_kanal_periode).",
       "Cassandra", [Param("id_kanal", "ID kanal", "select", "KNL01", [f"KNL0{i}" for i in range(1, 8)]), Param("tahun", "Tahun", "number", 2026)],
-      "-- per partisi (id_kanal, bulan)\nSELECT jenis_event, nominal, status_event, nama_kanal\n  FROM bri_ledger.ledger_by_kanal_bulan\n WHERE id_kanal = ? AND bulan = ?;\n-- lalu agregasi COUNT/SUM/AVG di aplikasi (status BERHASIL)", r03))
+      "SELECT periode AS bulan, nama_kanal, jenis_transaksi,\n       COUNT(*) AS jumlah_transaksi, SUM(nominal) AS total_nominal, AVG(nominal) AS rata_rata_nominal\n  FROM bri_tabungan.transaksi_by_kanal_periode\n WHERE id_kanal = ? AND periode IN (?, ...)\n   AND status_transaksi = 'BERHASIL'\n GROUP BY id_kanal, periode, status_transaksi, jenis_transaksi;", r03))
 
 
 # =========================================================================== WRITE helpers

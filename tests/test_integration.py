@@ -38,9 +38,8 @@ def saldo(client, no): return client.get(f"/rekening/{no}").json()["saldo_efekti
 
 def n_event(no, jenis=None):
     rows = state["rek"].ledger.s.execute(
-        "SELECT jenis_event FROM ledger_by_rekening WHERE no_rekening=%s AND bulan=%s",
-        [no, __import__("datetime").datetime.now(__import__("datetime").timezone.utc).strftime("%Y%m")]).all()
-    return len([r for r in rows if jenis is None or r.jenis_event == jenis])
+        "SELECT jenis_transaksi FROM transaksi_by_rekening WHERE no_rekening=%s", [no]).all()
+    return len([r for r in rows if jenis is None or r.jenis_transaksi == jenis])
 
 
 def test_setoran_ubah_saldo_dan_catat_event(client, accs):
@@ -106,7 +105,5 @@ def test_histori_terurut_terbaru_dulu(client, accs):
     assert ts == sorted(ts, reverse=True) and len(h) == 10
 
 
-def test_partisi_per_bulan_terbatas(client, accs):
-    from datetime import datetime, timezone
-    b = datetime.now(timezone.utc).strftime("%Y%m")
-    assert state["rek"].ledger.count_partition(accs[0], b) < 500
+def test_partisi_per_rekening_terbatas(client, accs):
+    assert state["rek"].ledger.count_rekening(accs[0]) < 5000

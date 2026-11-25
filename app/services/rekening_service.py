@@ -28,7 +28,7 @@ class RekeningService:
                                         "pemegang_rekening")}
 
     def histori(self, no_rekening: str, dari: datetime | None, sampai: datetime | None, limit: int = 50):
-        """R-01 -> Cassandra. Default: 12 bulan terakhir (partisi per bulan dibaca dari yang terbaru)."""
+        """R-01 -> Cassandra. Default: 12 bulan terakhir; satu partisi per rekening, sudah terurut waktu menurun."""
         sampai = sampai or datetime.now(timezone.utc) + timedelta(days=1)
         dari = dari or sampai - timedelta(days=365)
         rows = self.ledger.history(no_rekening, _months(dari, sampai), dari, sampai, limit)

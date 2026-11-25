@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     cassandra_hosts: str = "127.0.0.1"
     cassandra_port: int = 9042
-    cassandra_keyspace: str = "bri_ledger"
+    cassandra_keyspace: str = "bri_tabungan"
 
     pg_dsn: str = "host=localhost port=5434 dbname=tabungan_bri user=postgres password=password"
 

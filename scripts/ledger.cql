@@ -1,51 +1,49 @@
--- Event Ledger (append-only) — Cassandra
--- Prinsip: query-driven, partisi dibatasi per (rekening, bulan) agar tidak tumbuh tanpa batas.
-CREATE KEYSPACE IF NOT EXISTS bri_ledger
+-- Event Ledger (append-only), Cassandra.
+-- Prinsip: query-driven. Tiga tabel, masing-masing melayani satu pola akses.
+CREATE KEYSPACE IF NOT EXISTS bri_tabungan
   WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
-USE bri_ledger;
+USE bri_tabungan;
 
--- R-01: histori transaksi per rekening, terbaru dulu, bulan = format YYYYMM
-CREATE TABLE IF NOT EXISTS ledger_by_rekening (
-  no_rekening     text,
-  bulan           text,
-  waktu_event     timestamp,
-  event_id        text,
-  jenis_event     text,      -- SETORAN | PENARIKAN | TRANSFER_KELUAR | TRANSFER_MASUK | PEMBAYARAN | BIAYA | REVERSAL
-  arah            text,      -- KREDIT | DEBIT
-  nominal         decimal,
-  mata_uang       text,
-  id_kanal        text,
-  nama_kanal      text,
-  no_kartu        text,
-  status_event    text,      -- BERHASIL | GAGAL | PENDING | REVERSED
-  saldo_setelah   decimal,
-  counterparty    text,      -- rekening lawan (transfer)
-  sumber          text,      -- SEED | API
-  PRIMARY KEY ((no_rekening, bulan), waktu_event, event_id)
-) WITH CLUSTERING ORDER BY (waktu_event DESC, event_id ASC);
+-- R-01: riwayat transaksi per rekening, terbaru dulu
+CREATE TABLE IF NOT EXISTS transaksi_by_rekening (
+  no_rekening       text,
+  waktu_transaksi   timestamp,
+  id_transaksi      text,
+  jenis_transaksi   text,      -- SETORAN | PENARIKAN | TRANSFER_KELUAR | TRANSFER_MASUK | PEMBAYARAN | BIAYA | REVERSAL | STATUS_*
+  arah              text,      -- KREDIT | DEBIT
+  nominal           decimal,
+  mata_uang         text,
+  id_kanal          text,
+  nama_kanal        text,
+  no_kartu          text,
+  status_transaksi  text,      -- BERHASIL | GAGAL | PENDING | REVERSED
+  saldo_setelah     decimal,
+  counterparty      text,      -- rekening lawan (transfer)
+  sumber            text,      -- SEED | API
+  PRIMARY KEY ((no_rekening), waktu_transaksi, id_transaksi)
+) WITH CLUSTERING ORDER BY (waktu_transaksi DESC, id_transaksi ASC);
 
--- lookup/audit per event_id (idempotensi & jejak audit)
-CREATE TABLE IF NOT EXISTS ledger_event_by_id (
-  event_id      text PRIMARY KEY,
-  no_rekening   text,
-  bulan         text,
-  waktu_event   timestamp,
-  jenis_event   text,
-  nominal       decimal,
-  status_event  text,
-  saldo_setelah decimal,
-  sumber        text
+-- R-03: laporan jumlah dan nominal per bulan per kanal (GROUP BY dikerjakan server)
+CREATE TABLE IF NOT EXISTS transaksi_by_kanal_periode (
+  id_kanal          text,
+  periode           text,      -- YYYYMM
+  status_transaksi  text,
+  jenis_transaksi   text,
+  waktu_transaksi   timestamp,
+  id_transaksi      text,
+  nama_kanal        text,
+  nominal           decimal,
+  PRIMARY KEY ((id_kanal, periode), status_transaksi, jenis_transaksi, waktu_transaksi, id_transaksi)
 );
 
--- R-03: laporan jumlah dan nominal per bulan per kanal
-CREATE TABLE IF NOT EXISTS ledger_by_kanal_bulan (
-  id_kanal      text,
-  bulan         text,
-  waktu_event   timestamp,
-  event_id      text,
-  nama_kanal    text,
-  jenis_event   text,
-  nominal       decimal,
-  status_event  text,
-  PRIMARY KEY ((id_kanal, bulan), waktu_event, event_id)
+-- lookup per id_transaksi (idempotensi W-07 dan jejak audit)
+CREATE TABLE IF NOT EXISTS transaksi_by_id (
+  id_transaksi      text PRIMARY KEY,
+  no_rekening       text,
+  waktu_transaksi   timestamp,
+  jenis_transaksi   text,
+  nominal           decimal,
+  status_transaksi  text,
+  saldo_setelah     decimal,
+  sumber            text
 );

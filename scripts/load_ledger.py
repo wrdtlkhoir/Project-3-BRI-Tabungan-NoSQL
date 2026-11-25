@@ -12,11 +12,11 @@ from app.database.cassandra_db import get_session
 
 s = get_settings()
 session = get_session()
-ins_main = session.prepare("""INSERT INTO ledger_by_rekening (no_rekening, bulan, waktu_event, event_id, jenis_event, arah,
-    nominal, mata_uang, id_kanal, nama_kanal, no_kartu, status_event, saldo_setelah, counterparty, sumber)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""")
-ins_kanal = session.prepare("""INSERT INTO ledger_by_kanal_bulan (id_kanal, bulan, waktu_event, event_id, nama_kanal,
-    jenis_event, nominal, status_event) VALUES (?,?,?,?,?,?,?,?)""")
+ins_main = session.prepare("""INSERT INTO transaksi_by_rekening (no_rekening, waktu_transaksi, id_transaksi, jenis_transaksi, arah,
+    nominal, mata_uang, id_kanal, nama_kanal, no_kartu, status_transaksi, saldo_setelah, counterparty, sumber)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""")
+ins_kanal = session.prepare("""INSERT INTO transaksi_by_kanal_periode (id_kanal, periode, status_transaksi, jenis_transaksi,
+    waktu_transaksi, id_transaksi, nama_kanal, nominal) VALUES (?,?,?,?,?,?,?,?)""")
 
 t0 = time.time(); n = 0
 SQL = """SELECT t.no_rekening, t.waktu_transaksi, t.id_transaksi, t.jenis_transaksi, t.arah, t.nominal, t.mata_uang,
@@ -46,8 +46,8 @@ with psycopg.connect(s.pg_dsn) as conn, conn.cursor(name="c") as cur:
     for r in cur:
         no, w, eid, jenis, arah, nom, cur_, kanal, knama, kartu, st, saldo = r
         bulan = w.strftime("%Y%m")
-        main.append((no, bulan, w, eid, jenis, arah, nom, (cur_ or "IDR").strip(), kanal, knama, kartu, st, saldo, None, "SEED"))
-        kan.append((kanal, bulan, w, eid, knama, jenis, nom, st))
+        main.append((no, w, eid, jenis, arah, nom, (cur_ or "IDR").strip(), kanal, knama, kartu, st, saldo, None, "SEED"))
+        kan.append((kanal, bulan, st, jenis, w, eid, knama, nom))
         if len(main) >= 10000:
             flush()
     if main:

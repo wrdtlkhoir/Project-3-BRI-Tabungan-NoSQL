@@ -6,7 +6,7 @@ saling terhubung lewat backend Python (FastAPI).
 | Komponen | Peran |
 |---|---|
 | **Couchbase CE 7.6.1** | Main database: nasabah, rekening (saldo integer sen), kartu, produk, unit kerja, kanal, posting bunga, instruksi, **outbox** |
-| **Cassandra 5.0** | **Event Ledger** append-only: `ledger_by_rekening`, `ledger_event_by_id`, `ledger_by_kanal_bulan` (keyspace `bri_ledger`) |
+| **Cassandra 5.0** | **Event Ledger** append-only: `transaksi_by_rekening`, `transaksi_by_kanal_periode`, `transaksi_by_id` (keyspace `bri_tabungan`) |
 | **PostgreSQL 16** | Hanya sumber seed (dump Project 2). Dipakai sekali untuk memuat kedua DBMS |
 | **FastAPI** | Validasi, transaksi ACID Couchbase, transactional outbox, relay ke Cassandra |
 

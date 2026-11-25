@@ -106,7 +106,7 @@ def instrument():
     from app.services.transaksi_service import TransaksiService as TS
     for n in ("get_rekening", "get_nasabah", "get_outbox", "mark_outbox", "query"):
         _wrap(CB, n, "cb")
-    for n in ("append_event", "history", "report_kanal", "months_with_data", "count_partition", "get_event"):
+    for n in ("append_event", "history", "report_kanal", "count_rekening", "get_event"):
         _wrap(CA, n, "cass")
     _wrap(TS, "_run_txn", "cb")      # transaksi ACID Couchbase (validasi + update saldo + outbox)
 

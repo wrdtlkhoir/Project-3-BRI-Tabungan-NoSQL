@@ -77,9 +77,9 @@ def status(refresh: bool = False):
             tot = 0
             for kanal in [f"KNL0{i}" for i in range(1, 8)]:
                 for b in [f"2025{m:02d}" for m in (11, 12)] + [f"2026{m:02d}" for m in range(1, 13)]:
-                    tot += trx.ledger.s.execute("SELECT COUNT(*) FROM ledger_by_kanal_bulan WHERE id_kanal=%s AND bulan=%s", [kanal, b]).one()[0]
+                    tot += trx.ledger.s.execute("SELECT COUNT(*) FROM transaksi_by_kanal_periode WHERE id_kanal=%s AND periode=%s", [kanal, b]).one()[0]
             c["ledger_events"] = tot
-            c["ledger_api"] = trx.ledger.s.execute("SELECT COUNT(*) FROM ledger_event_by_id").one()[0]
+            c["ledger_api"] = trx.ledger.s.execute("SELECT COUNT(*) FROM transaksi_by_id").one()[0]
         except Exception as e:
             c["ledger_error"] = str(e)[:150]
         _cache["counts"] = (time.time(), c)

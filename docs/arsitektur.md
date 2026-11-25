@@ -7,9 +7,9 @@ Client ──HTTP──▶ FastAPI backend (Python)
          ▼                      ▼
    Couchbase CE 7.6.1       Cassandra 5.0
    (main database)          (Event Ledger, append-only)
-   rekening, nasabah, ...   ledger_by_rekening ((no_rekening, bulan), waktu DESC)
-   saldo (integer sen)      ledger_event_by_id
-   outbox (PENDING→PUBLISHED) ledger_by_kanal_bulan
+   rekening, nasabah, ...   transaksi_by_rekening ((no_rekening), waktu DESC)
+   saldo (integer sen)      transaksi_by_id
+   outbox (PENDING→PUBLISHED) transaksi_by_kanal_periode
 ```
 
 ## Alur setoran (Transactional Outbox)

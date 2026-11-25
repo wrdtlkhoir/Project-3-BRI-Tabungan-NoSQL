@@ -38,20 +38,20 @@ ses = get_session()
 # rekonsiliasi saldo: total saldo Couchbase = total seed (PG) + net event API di ledger (setoran/transfer masuk - penarikan/transfer keluar)
 net = 0
 n_api_uji = 0
-for r in ses.execute("SELECT jenis_event, nominal, no_rekening FROM ledger_event_by_id"):
+for r in ses.execute("SELECT jenis_transaksi, nominal, no_rekening FROM transaksi_by_id"):
     if r.no_rekening.startswith("002999"):          # event data uji tidak dihitung
         n_api_uji += 1
         continue
-    sign = 1 if r.jenis_event in ("SETORAN", "TRANSFER_MASUK") else (-1 if r.jenis_event in ("PENARIKAN", "TRANSFER_KELUAR") else 0)
+    sign = 1 if r.jenis_transaksi in ("SETORAN", "TRANSFER_MASUK") else (-1 if r.jenis_transaksi in ("PENARIKAN", "TRANSFER_KELUAR") else 0)
     net += sign * int(r.nominal * 100)
 check("Rekonsiliasi total saldo Couchbase = seed PG + net event ledger (sen)", int(pg_saldo * 100) + net, int(tot_sen))
 # Cassandra tidak punya COUNT(*) murah lintas partisi: hitung dari tabel kanal (7 kanal x 12 bulan) atau sampel
 total = 0
 for kanal in ["KNL01", "KNL02", "KNL03", "KNL04", "KNL05", "KNL06", "KNL07"]:
     for b in [f"2025{m:02d}" for m in (11, 12)] + [f"2026{m:02d}" for m in range(1, 12)]:
-        total += ses.execute("SELECT COUNT(*) FROM ledger_by_kanal_bulan WHERE id_kanal=%s AND bulan=%s", [kanal, b]).one()[0]
-n_api = ses.execute("SELECT COUNT(*) FROM ledger_event_by_id").one()[0]      # event yang dibuat API (bukan seed), termasuk data uji
-check("Cassandra ledger (ledger_by_kanal_bulan, event SEED saja)", pg_tx, total - n_api)
+        total += ses.execute("SELECT COUNT(*) FROM transaksi_by_kanal_periode WHERE id_kanal=%s AND periode=%s", [kanal, b]).one()[0]
+n_api = ses.execute("SELECT COUNT(*) FROM transaksi_by_id").one()[0]      # event yang dibuat API (bukan seed), termasuk data uji
+check("Cassandra ledger (transaksi_by_kanal_periode, event SEED saja)", pg_tx, total - n_api)
 print(f"       (event dari API setelah seed: {n_api})")
 
 # konsistensi identifier: rekening uji ada di kedua DB dan jumlah event ledger = tx_count Couchbase
@@ -59,9 +59,7 @@ from app.repositories.couchbase_repository import CouchbaseRepository
 cb = CouchbaseRepository()
 for no in ("002101000000001", "002101000000004"):
     doc = cb.get_rekening(no)
-    n_led = 0
-    for b in [f"2025{m:02d}" for m in (11, 12)] + [f"2026{m:02d}" for m in range(1, 13)]:
-        n_led += ses.execute("SELECT COUNT(*) FROM ledger_by_rekening WHERE no_rekening=%s AND bulan=%s", [no, b]).one()[0]
+    n_led = ses.execute("SELECT COUNT(*) FROM transaksi_by_rekening WHERE no_rekening=%s", [no]).one()[0]
     check(f"rekening {no}: tx_count Couchbase vs event ledger", doc["tx_count"], n_led)
 print("HASIL VALIDASI:", "SEMUA OK" if ok else "ADA PERBEDAAN")
 sys.exit(0 if ok else 1)
