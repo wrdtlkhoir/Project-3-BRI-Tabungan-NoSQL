@@ -7,3 +7,6 @@ __pycache__/
 
 # log hasil jalan
 *.log
+
+# presentasi tidak ikut repo
+*.pptx
